@@ -1,0 +1,22 @@
+---
+import Sidebar from "../components/ui/sidebar";
+import "../styles/global.css";
+const { title = "Mi Sitio" } = Astro.props;
+---
+
+<html lang="es" class="w-full min-h-screen overflow-x-hidden">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="w-full h-full flex">
+    <Sidebar client:load />
+    <main class="flex-1 p-6 overflow-y-auto mt-10 md:mt-0">
+      <!-- <h1 class="text-3xl font-bold underline">Welcome to Astro</h1> -->
+      <slot />
+    </main>
+  </body>
+</html>
