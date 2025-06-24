@@ -1,4 +1,4 @@
-import { Settings, FileDown } from "lucide-react"; // Asegúrate de importar el ícono
+import { Settings, FileDown, Fuel } from "lucide-react"; // Fuel es un ícono relacionado
 
 type SidebarOption = {
   label: string;
@@ -13,8 +13,15 @@ export const optionsSidebar: SidebarOption[] = [
     href: "/configuracion",
   },
   {
-    label: "Loggin", // Nuevo menú
+    label: "Loggin",
     icon: <FileDown size={20} />,
     href: "/loggin",
   },
+  {
+    label: "Control de Surtidores",
+    icon: <Fuel size={20} />,
+    href: "/control-surtidores", // Nueva ruta sin conflicto
+  },
+
+
 ];

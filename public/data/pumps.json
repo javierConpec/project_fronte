@@ -1,0 +1,82 @@
+[
+    {
+        "surtidor": 1,
+        "estado": "INACTIVO",
+        "manguera": "0",
+        "precio": 13.95,
+        "volumenLlenado": 6.093,
+        "montoLlenado": 85,
+        "volumenTotal": 43460.373,
+        "montoTotal": 666825.87
+    },
+    {
+        "surtidor": 2,
+        "estado": "INACTIVO",
+        "manguera": "0",
+        "precio": 14.41,
+        "volumenLlenado": 1.388,
+        "montoLlenado": 20,
+        "volumenTotal": 30742.980,
+        "montoTotal": 485054.62
+    },
+    {
+        "surtidor": 3,
+        "estado": "INACTIVO",
+        "manguera": "0",
+        "precio": 14.41,
+        "volumenLlenado": 0.347,
+        "montoLlenado": 5.00,
+        "volumenTotal": 30467.341,
+        "montoTotal": 465146.64
+    },
+    {
+        "surtidor": 4,
+        "estado": "INACTIVO",
+        "manguera": "0",
+        "precio": 13.95,
+        "volumenLlenado": 8.675,
+        "montoLlenado": 121.02,
+        "volumenTotal": 103548.625,
+        "montoTotal": 1619149.82
+    },
+    {
+        "surtidor": 5,
+        "estado": "INACTIVO",
+        "manguera": "0",
+        "precio": 7.65,
+        "volumenLlenado": 8.839,
+        "montoLlenado": 67.62,
+        "volumenTotal": 77862.307,
+        "montoTotal": 0
+    },
+    {
+        "surtidor": 6,
+        "estado": "INACTIVO",
+        "manguera": "0",
+        "precio": 7.65,
+        "volumenLlenado": 1.307,
+        "montoLlenado": 10.00,
+        "volumenTotal": 47023.276,
+        "montoTotal": 0
+    },
+    {
+        "surtidor": 7,
+        "estado": "LLENANDO",
+        "manguera": "1 (GLP)",
+        "precio": 7.65,
+        "volumenLlenado": 9.649,
+        "montoLlenado": 73.81,
+        "volumenTotal": 47022.376,
+        "montoTotal": 0
+    },
+    {
+        "surtidor": 8,
+        "estado": "INACTIVO",
+        "manguera": "0",
+        "precio": 7.65,
+        "volumenLlenado": 5.036,
+        "montoLlenado": 38.53,
+        "volumenTotal": 104581.285,
+        "montoTotal": 0
+    }
+]

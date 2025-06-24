@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Pencil } from "lucide-react"; // ✅ Agregado
+
 import combustibles from "../data/combustibles.json";
 import manguerasData from "../data/mangueras.json";
 import tanques from "../data/tanques.json";
@@ -10,14 +12,18 @@ function obtenerNombreCombustible(id: number) {
 }
 
 export default function ManguerasPage() {
-    const [mangueras, setMangueras] = useState(manguerasData);
+    const [mangueras, setMangueras] = useState(
+        manguerasData.map((item) => ({
+            ...item,
+            mangueras: item.mangueras.slice(0, 4),
+        }))
+    );
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [formData, setFormData] = useState({
         surtidor: "",
-        mangueras: Array(6).fill({ combustibleId: 0, tanque: "" }),
+        mangueras: Array(4).fill({ combustibleId: 0, tanque: "" }),
     });
 
-    // Paginación
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
     const totalPages = Math.ceil(mangueras.length / itemsPerPage);
@@ -29,7 +35,7 @@ export default function ManguerasPage() {
         const item = mangueras[globalIndex];
         setFormData({
             surtidor: item.surtidor,
-            mangueras: [...item.mangueras, ...Array(6 - item.mangueras.length).fill({ combustibleId: 0, tanque: "" })],
+            mangueras: [...item.mangueras.slice(0, 4), ...Array(4 - item.mangueras.length).fill({ combustibleId: 0, tanque: "" })],
         });
         setEditingIndex(globalIndex);
     };
@@ -65,39 +71,40 @@ export default function ManguerasPage() {
     return (
         <div>
             <h1 className="text-2xl font-bold mb-4">Mangueras</h1>
-            <table className="min-w-full bg-white rounded-xl shadow text-sm text-gray-700">
+            <table className="min-w-full bg-white rounded-xl shadow text-sm text-gray-700 text-center">
                 <thead className="bg-blue-100 text-xs uppercase font-semibold">
                     <tr>
-                        <th className="px-6 py-1">Surtidor</th>
-                        {[...Array(6)].map((_, i) => (
+                        <th className="px-6 py-3">Surtidor</th>
+                        {[...Array(4)].map((_, i) => (
                             <React.Fragment key={i}>
-                                <th className="px-6 py-1">Comb. Mang. {i + 1}</th>
-                                <th className="px-6 py-1">Tanque {i + 1}</th>
+                                <th className="px-6 py-3">Comb. Mang. {i + 1}</th>
+                                <th className="px-6 py-3">Tanque {i + 1}</th>
                             </React.Fragment>
                         ))}
-                        <th className="px-6 py-1">Editar</th>
+                        <th className="px-6 py-3">Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody className="divide-y divide-gray-200">
                     {currentData.map((item, idx) => (
                         <tr key={idx} className="hover:bg-gray-50 transition">
-                            <td className="px-6 py-1">{item.surtidor}</td>
-                            {[...Array(6)].map((_, i) => {
+                            <td className="px-6 py-3">{item.surtidor}</td>
+                            {[...Array(4)].map((_, i) => {
                                 const m = item.mangueras[i];
                                 return (
                                     <React.Fragment key={i}>
-                                        <td className="px-6 py-1">{m ? obtenerNombreCombustible(m.combustibleId) : "0"}</td>
-                                        <td className="px-6 py-1">{m ? m.tanque : "0"}</td>
+                                        <td className="px-6 py-3">{m ? obtenerNombreCombustible(m.combustibleId) : "0"}</td>
+                                        <td className="px-6 py-3">{m ? m.tanque : "0"}</td>
                                     </React.Fragment>
                                 );
                             })}
-                            <td className="px-6 py-1">
+                            <td className="px-6 py-3">
                                 <button
-                                    className="text-blue-600 hover:underline"
+                                    className="text-blue-600 hover:text-blue-800"
                                     onClick={() => handleEdit(idx)}
+                                    title="Editar"
                                 >
-                                    Editar
+                                    <Pencil size={18} />
                                 </button>
                             </td>
                         </tr>
@@ -142,7 +149,7 @@ export default function ManguerasPage() {
                             />
                         </div>
 
-                        {formData.mangueras.map((m, i) => (
+                        {formData.mangueras.slice(0, 4).map((m, i) => (
                             <div key={i} className="grid grid-cols-2 gap-4 mb-3">
                                 <div>
                                     <label className="block text-sm">Combustible (Mang. {i + 1})</label>

@@ -1,0 +1,14 @@
+---
+// src/layouts/blank.astro
+import "../styles/global.css";
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title><slot name="title" /></title>
+  </head>
+  <body class="bg-gray-100">
+    <slot />
+  </body>
+</html>
