@@ -1,0 +1,22 @@
+[
+    {
+        "nombre": "Tanque 3",
+        "combustibleId": 5
+    },
+    {
+        "nombre": "Tanque 1",
+        "combustibleId": 2
+    },
+    {
+        "nombre": "Tanque 5",
+        "combustibleId": 5
+    },
+    {
+        "nombre": "Tanque 2",
+        "combustibleId": 3
+    },
+    {
+        "nombre": "Tanque 4",
+        "combustibleId": 1
+    }
+]

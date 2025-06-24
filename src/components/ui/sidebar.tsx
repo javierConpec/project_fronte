@@ -54,27 +54,21 @@ export default function Sidebar() {
             </li>
 
             {optionsSidebar.map((option) => (
-              <li key={option.href}>
+              <li key={option.label}>
                 <a
                   href={option.href}
-                  // className="flex items-center gap-2 rounded p-2 transition-colors hover:bg-gray-700"
                   className={cn(
-                    "flex h-10 w-full items-center overflow-hidden rounded transition-colors hover:bg-gray-700",
-                    visible ? "justify-start gap-2 px-2" : "justify-center",
+                    "flex items-center gap-2 rounded p-2 transition-colors hover:bg-gray-700",
+                    !visible && "justify-center",
+                    "text-white"
                   )}
                 >
-                  <span className="shrink-0 text-lg">{option.icon}</span>
-                  <span
-                    className={cn(
-                      "transition-opacity duration-300",
-                      !visible && "hidden opacity-0",
-                    )}
-                  >
-                    {option.label}
-                  </span>
+                  <span>{option.icon}</span>
+                  {visible && <span>{option.label}</span>}
                 </a>
               </li>
             ))}
+
           </ul>
         </nav>
       </aside>

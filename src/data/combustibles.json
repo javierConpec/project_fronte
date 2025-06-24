@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "nombre": "Gasohol 90",
+        "precio": 18.50,
+        "coefExp": 0.00095,
+        "tanque1": "T1",
+        "porcentajeMezcla": 70,
+        "tanque2": "T2"
+    },
+    {
+        "id": 2,
+        "nombre": "Diesel",
+        "precio": 17.25,
+        "coefExp": 0.00085,
+        "tanque1": "T3",
+        "porcentajeMezcla": 50,
+        "tanque2": "T4"
+    },
+    {
+        "id": 3,
+        "nombre": "Premium",
+        "precio": 15.79,
+        "coefExp": 0.00090,
+        "tanque1": "T5",
+        "porcentajeMezcla": 40,
+        "tanque2": "T6"
+    },
+    {
+        "id": 5,
+        "nombre": "Diesel Plus",
+        "precio": 13.95,
+        "coefExp": 0.00080,
+        "tanque1": "T7",
+        "porcentajeMezcla": 60,
+        "tanque2": "T8"
+    }
+]

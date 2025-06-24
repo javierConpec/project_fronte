@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "surtidor": "Surtidor 1",
+        "mangueras": [
+            {
+                "combustibleId": 5,
+                "tanque": "Tanque 3"
+            },
+            {
+                "combustibleId": 2,
+                "tanque": "Tanque 1"
+            },
+            {
+                "combustibleId": 5,
+                "tanque": "Tanque 5"
+            },
+            {
+                "combustibleId": 3,
+                "tanque": "Tanque 2"
+            },
+            {
+                "combustibleId": 0,
+                "tanque": "0"
+            },
+            {
+                "combustibleId": 0,
+                "tanque": "0"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "surtidor": "Surtidor 2",
+        "mangueras": [
+            {
+                "combustibleId": 1,
+                "tanque": "Tanque 4"
+            },
+            {
+                "combustibleId": 3,
+                "tanque": "Tanque 2"
+            },
+            {
+                "combustibleId": 2,
+                "tanque": "Tanque 1"
+            },
+            {
+                "combustibleId": 0,
+                "tanque": "0"
+            },
+            {
+                "combustibleId": 0,
+                "tanque": "0"
+            },
+            {
+                "combustibleId": 0,
+                "tanque": "0"
+            }
+        ]
+    }
+]
