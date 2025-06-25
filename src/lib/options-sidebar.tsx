@@ -1,4 +1,4 @@
-import { Settings, FileDown, Fuel } from "lucide-react"; // Fuel es un ícono relacionado
+import { Settings, FileDown, Fuel, FileBarChart } from "lucide-react"; // Agregamos FileBarChart
 
 type SidebarOption = {
   label: string;
@@ -20,8 +20,11 @@ export const optionsSidebar: SidebarOption[] = [
   {
     label: "Control de Surtidores",
     icon: <Fuel size={20} />,
-    href: "/control-surtidores", // Nueva ruta sin conflicto
+    href: "/control-surtidores",
   },
-
-
+  {
+    label: "Reportes",
+    icon: <FileBarChart size={20} />,
+    href: "/reportes",
+  },
 ];

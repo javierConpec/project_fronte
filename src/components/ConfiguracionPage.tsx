@@ -22,8 +22,8 @@ export default function ConfiguracionPage() {
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`px-6 py-2 text-sm font-medium transition-colors duration-300 rounded-full ${activeTab === tab.id
-                            ? "bg-blue-600 text-white shadow"
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            ? "bg-gray-700 text-white shadow"
+                            : "bg-gray-200 text-gray-800 hover:bg-gray-300"
                             }`}
                     >
                         {tab.name}

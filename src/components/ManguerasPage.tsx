@@ -72,7 +72,7 @@ export default function ManguerasPage() {
         <div>
             <h1 className="text-2xl font-bold mb-4">Mangueras</h1>
             <table className="min-w-full bg-white rounded-xl shadow text-sm text-gray-700 text-center">
-                <thead className="bg-blue-100 text-xs uppercase font-semibold">
+                <thead className="bg-gray-700 text-xs uppercase font-semibold text-white text-center">
                     <tr>
                         <th className="px-6 py-3">Surtidor</th>
                         {[...Array(4)].map((_, i) => (
@@ -100,7 +100,7 @@ export default function ManguerasPage() {
                             })}
                             <td className="px-6 py-3">
                                 <button
-                                    className="text-blue-600 hover:text-blue-800"
+                                    className="text-gray-700 hover:text-gray-900"
                                     onClick={() => handleEdit(idx)}
                                     title="Editar"
                                 >
@@ -187,16 +187,17 @@ export default function ManguerasPage() {
                         <div className="mt-4 flex justify-end gap-2">
                             <button
                                 onClick={() => setEditingIndex(null)}
-                                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                                className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
                             >
                                 Cancelar
                             </button>
                             <button
                                 onClick={handleSave}
-                                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-900"
                             >
                                 Guardar
                             </button>
+
                         </div>
                     </div>
                 </div>

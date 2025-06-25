@@ -37,7 +37,7 @@ export default function CombustiblesPage() {
             <h2 className="text-2xl font-bold mb-4">Combustibles</h2>
 
             <table className="min-w-full bg-white rounded-xl shadow text-sm text-gray-700">
-                <thead className="bg-blue-100 text-xs uppercase font-semibold text-center">
+                <thead className="bg-gray-700 text-xs uppercase font-semibold text-white text-center">
                     <tr>
                         <th className="px-6 py-3">No</th>
                         <th className="px-6 py-3">Nombre</th>
@@ -62,7 +62,7 @@ export default function CombustiblesPage() {
                             <td className="px-6 py-3">
                                 <button
                                     onClick={() => setEditing(item)}
-                                    className="text-blue-600 hover:text-blue-800"
+                                    className="text-gray-700 hover:text-gray-900"
                                     title="Editar"
                                 >
                                     <Pencil size={18} />
@@ -109,10 +109,10 @@ export default function CombustiblesPage() {
                             <input type="text" value={editing.tanque2} onChange={e => handleChange("tanque2", e.target.value)} placeholder="Tanque 2" className="w-full border rounded p-2" />
                         </div>
                         <div className="mt-4 flex justify-end gap-2">
-                            <button onClick={() => setEditing(null)} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+                            <button onClick={() => setEditing(null)} className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">
                                 Cancelar
                             </button>
-                            <button onClick={handleSave} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            <button onClick={handleSave} className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-900">
                                 Guardar
                             </button>
                         </div>

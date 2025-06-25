@@ -1,10 +1,8 @@
 ---
-import LoginForm from "../components/LoginForm.tsx";
 import BlankLayout from "../layouts/blank.astro";
+import LoginEntry from "../components/LoginEntry";
 ---
 
 <BlankLayout title="Iniciar sesión">
-  <div class="flex items-center justify-center min-h-screen">
-    <LoginForm client:load />
-  </div>
+  <LoginEntry client:load />
 </BlankLayout>

@@ -1,0 +1,15 @@
+---
+// src/pages/home.astro
+import Layout from "../layouts/with-sidebar.astro";
+---
+
+<!-- Bloquea acceso si no hay sesión -->
+<script is:inline>
+  if (localStorage.getItem("isLoggedIn") !== "true") {
+    window.location.href = "/";
+  }
+</script>
+
+<Layout title="Inicio">
+  <h1 class="text-3xl font-bold">Hola Mundo</h1>
+</Layout>
