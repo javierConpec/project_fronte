@@ -33,13 +33,20 @@ export const ChartBarraProductos = () => {
             label: "Total Vendido por Producto",
             data,
             backgroundColor: colores.slice(0, data.length),
-            borderRadius: 6,
+            borderRadius: 10,
           },
         ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        animation: {
+          duration: 2000,
+          easing: "linear",
+          delay(ctx) {
+            return ctx.dataIndex * 150;
+          },
+        },
         plugins: {
           title: {
             display: true,

@@ -35,7 +35,7 @@ const ChartVentaDashboard = () => {
         data: fechasOrdenadas.map((f) => ventasPorFecha[f] || 0),
         borderColor: colores[idx % colores.length],
         backgroundColor: colores[idx % colores.length],
-        tension: 0.1,
+        tension: 0.15,
         fill: false,
         pointRadius: 5,
         pointHoverRadius: 7,
@@ -57,12 +57,12 @@ const ChartVentaDashboard = () => {
         responsive: true,
         maintainAspectRatio: false,
         animation: {
-  duration: 1000,
-  easing: 'linear',
-  delay(ctx) {
-    return ctx.dataIndex * 150;
-  },
-},
+          duration: 800,
+          easing: "linear",
+          delay(ctx) {
+            return ctx.dataIndex * 150;
+          },
+        },
         plugins: {
           title: {
             display: true,

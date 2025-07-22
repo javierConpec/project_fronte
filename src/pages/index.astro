@@ -4,11 +4,15 @@ import Layout from "../layouts/with-sidebar.astro";
 import { CardDashboard } from "../components/cardDashboard";
 import ChartVentaDashboard from "../components/charts/chartVentaDashboard";
 import { ChartBarraProductos } from "../components/charts/chartVentaProdDashboard";
+import {ChartMangueras} from "../components/charts/chartVentaNozzleDashboard";
 ---
 
 <Layout title="Inicio">
    <CardDashboard client:load />
    <ChartVentaDashboard client:load />
-      <ChartBarraProductos client:load />
+      <div class="flex gap-3"> 
+         <ChartBarraProductos client:load />
+      <ChartMangueras client:load />
+      </div>
    </div>
 </Layout>
