@@ -2,7 +2,7 @@ import { create } from "zustand"
 
 type SidebarStore = {
   visible: boolean
-  setVisible: () => void
+  setVisible: (value: boolean) => void
 }
 
 export const useSidebarStore = create<SidebarStore>((set) => ({

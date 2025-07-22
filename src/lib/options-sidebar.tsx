@@ -1,4 +1,4 @@
-import { Settings, FileDown, Fuel, FileBarChart } from "lucide-react"; // Agregamos FileBarChart
+import { Settings, FileDown, Fuel, FileBarChart, Home } from "lucide-react"; // Agregamos FileBarChart
 
 type SidebarOption = {
   label: string;
@@ -7,6 +7,11 @@ type SidebarOption = {
 };
 
 export const optionsSidebar: SidebarOption[] = [
+  {
+    label: "Inicio",
+    icon: <Home size={20} />,
+    href: "/",
+  },
   {
     label: "Configuración",
     icon: <Settings size={20} />,
