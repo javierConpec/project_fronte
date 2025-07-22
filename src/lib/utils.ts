@@ -10,3 +10,8 @@ export function formatPrice(value: unknown): string {
   if (isNaN(num)) return "S/ 0.00";
   return `${num.toFixed(2)}`;
 }
+
+
+export const formatDate = (isoDate: string): string => {
+  return new Date(isoDate).toISOString().split("T")[0];
+};
