@@ -2,7 +2,7 @@
 import Sidebar from "../components/ui/sidebar";
 import "../styles/global.css";
 
-const { title = "Mi Sitio" } = Astro.props;
+const { title = "Isi Global Solutions" } = Astro.props;
 ---
 
 <html lang="es" class="w-full min-h-screen overflow-x-hidden">
@@ -17,20 +17,9 @@ const { title = "Mi Sitio" } = Astro.props;
   <body class="w-full h-full flex">
     <Sidebar client:load />
 
-    <div class="flex-1 flex flex-col">
-      <!-- Header superior con mismo estilo que el sidebar -->
-<header class="w-full h-20 bg-gray-800 text-white shadow pl-2 flex items-center fixed top-0 left-0 z-50">
-  <div class="flex flex-col items-start">
-    <img src="/logo.png" alt="Logo" class="mt-1 max-h-10 w-auto p-1 rounded" />
-    <span class="text-xs italic text-gray-300 mt-1 ml-4">versión v1.0.0</span>
-  </div>
-</header>
-
-
-      <!-- Contenido principal -->
-<main class="flex-1 p-6 overflow-y-auto mt-20">
-        <slot />
-      </main>
-    </div>
+    <!-- Contenido principal -->
+    <main class="flex-1 bg-gray-300 p-6 overflow-y-auto">
+      <slot />
+    </main>
   </body>
 </html>
