@@ -1,5 +1,5 @@
-import {useTotalAmount,useTotalHoy,useTotalNozzles,useTotalVolume,} from "../hooks/cardHook";
-import { iconsMap } from "../styles/iconCard";
+import {useTotalAmount,useTotalHoy,useTotalNozzles,useTotalVolume,} from "../../hooks/cardHook";
+import { iconsMap } from "../../styles/iconCard";
 import { AnimatedCounter } from "./animateCounter";
 
 export const CardDashboard = () => {
