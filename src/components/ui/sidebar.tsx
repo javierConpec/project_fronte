@@ -18,7 +18,7 @@ export default function Sidebar() {
 
       <aside
         className={cn(
-          "fixed top-0 left-0 z-40 h-screen bg-gray-800 p-4 pt-4 text-white transition-all duration-300 md:static md:block",
+          "fixed top-0 left-0  z-40 h-screen bg-gray-800 p-4 pt-4 text-white transition-all duration-300 md:static md:block",
           !visible && "md:w-16",
           visible ? "w-64" : "w-16"
         )}

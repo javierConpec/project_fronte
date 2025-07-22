@@ -1,31 +1,12 @@
-import {
-  useTotalAmount,
-  useTotalHoy,
-  useTotalNozzles,
-  useTotalVolume,
-  
-} from "../hooks/cardHook";
-import { formatPrice } from "../lib/utils";
+import {useTotalAmount,useTotalHoy,useTotalNozzles,useTotalVolume,} from "../hooks/cardHook";
 import { iconsMap } from "../styles/iconCard";
 import { AnimatedCounter } from "./animateCounter";
 
 export const CardDashboard = () => {
-  const {
-    totalAmount,
-    loading: loadingAmount,
-    error: errorAmount,
-  } = useTotalAmount();
+  const {totalAmount,loading: loadingAmount,error: errorAmount,} = useTotalAmount();
   const { totalHoy, loading: loadingHoy, error: errorHoy } = useTotalHoy();
-  const {
-    totalNozzles,
-    loading: loadingNozzles,
-    error: errorNozzles,
-  } = useTotalNozzles();
-  const {
-    totalVolume,
-    loading: loadingVolume,
-    error: errorVolume,
-  } = useTotalVolume();
+  const {totalNozzles,loading: loadingNozzles,error: errorNozzles,} = useTotalNozzles();
+  const {totalVolume,loading: loadingVolume,error: errorVolume,} = useTotalVolume();
 
   if (loadingAmount || loadingHoy || loadingNozzles || loadingVolume) {
     return <p>Cargando datos...</p>;
