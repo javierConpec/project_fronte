@@ -3,3 +3,8 @@ export interface IchartVenta{
     producto: string;
     total_vendido: number;
 }
+
+export interface IchartVentaProducto {
+    producto: string;
+    total_vendido: number;
+}
