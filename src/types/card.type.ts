@@ -13,3 +13,10 @@ export interface ItotalHoy {
 export interface ItotalNozzles{
     totalNozzles: number;
 }
+
+export interface AnimatedCounterProps {
+  value: number;
+  duration?: number; 
+  prefix?: string;
+  isMoney?: boolean;
+}

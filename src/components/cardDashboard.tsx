@@ -3,9 +3,11 @@ import {
   useTotalHoy,
   useTotalNozzles,
   useTotalVolume,
+  
 } from "../hooks/cardHook";
 import { formatPrice } from "../lib/utils";
 import { iconsMap } from "../styles/iconCard";
+import { AnimatedCounter } from "./animateCounter";
 
 export const CardDashboard = () => {
   const {
@@ -39,7 +41,7 @@ export const CardDashboard = () => {
         <div className="flex flex-col mx-4">
           <h3 className="text-lg font-bold text-slate-100">VENTA DE HOY</h3>
           <p className="text-3xl font-bold text-slate-100">
-            S/ {formatPrice(totalHoy?.totalHoy)}
+            <AnimatedCounter value={totalHoy?.totalHoy ?? 0} isMoney />
           </p>
         </div>
         <div className="mr-5">{iconsMap["VentaHoy"]}</div>
@@ -49,7 +51,7 @@ export const CardDashboard = () => {
         <div className="flex flex-col mx-4">
           <h3 className="text-lg font-bold text-slate-100">MANGUERAS</h3>
           <p className="text-3xl font-bold text-slate-100">
-            {totalNozzles?.totalNozzles}
+            <AnimatedCounter value={totalNozzles?.totalNozzles ?? 0} />
           </p>
         </div>
         <div className="mr-5">{iconsMap["manguera"]}</div>
@@ -59,7 +61,7 @@ export const CardDashboard = () => {
         <div className="flex flex-col mx-4">
           <h3 className="text-lg font-bold text-slate-100">VOL. VENDIDO</h3>
           <p className="text-3xl font-bold text-slate-100">
-            {formatPrice(totalVolume?.totalVolume)}
+            <AnimatedCounter value={totalVolume?.totalVolume ?? 0}  />
           </p>
         </div>
         <div className="mr-5">{iconsMap["volume"]}</div>
@@ -69,7 +71,7 @@ export const CardDashboard = () => {
         <div className="flex flex-col mx-4">
           <h3 className="text-lg font-bold text-slate-100">VENTA TOTAL</h3>
           <p className="text-3xl font-bold text-slate-100">
-            S/ {formatPrice(totalAmount?.totalAmount)}
+             <AnimatedCounter value={totalAmount?.totalAmount ?? 0} isMoney />
           </p>
         </div>
         <div className="mr-5">{iconsMap["VentaTotal"]}</div>
