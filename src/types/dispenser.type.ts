@@ -9,5 +9,4 @@ export type Dispenser = {
   totalAmount: number
   user: string
   request: string  
-  
 }
