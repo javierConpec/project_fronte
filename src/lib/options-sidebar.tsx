@@ -4,6 +4,7 @@ type SidebarOption = {
   label: string;
   icon: React.ReactNode;
   href: string;
+  subOptions?: SidebarOption[];
 };
 
 export const optionsSidebar: SidebarOption[] = [
