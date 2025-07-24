@@ -3,7 +3,7 @@ import type { PropsFilter } from "../../types/reporte.type";
 import { CustomDropdown } from "../CustomDropDown";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "../../styles/datePicker.css";
+import "../../styles/datepicker.css";
 import { useState } from "react";
 
 
