@@ -19,12 +19,7 @@
   border-radius: 0.375rem;
 }
 
-/* Día de inicio y fin */
-.react-datepicker__day--range-start,
-.react-datepicker__day--range-end {
-  background-color: #fb7324 !important; 
-  color: white !important;
-}
+
 
 /* Hover */
 .react-datepicker__day:hover {
