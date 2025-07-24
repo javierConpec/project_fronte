@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useReporteGeneral } from "../../hooks/reporteHook";
 import { formatDate } from "../../lib/utils";
 import { useReporteFiltrosStore } from "../../store/reporteFiltros.store";
+import { FileText } from "lucide-react";
+import { SectionTitle } from "../../components/sectionTitle";
 
 export const ReporteGeneralTable = () => {
   const { filtros } = useReporteFiltrosStore();
   const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 5;
+    const itemsPerPage = 15;
      const { data, loading, error } = useReporteGeneral(
     filtros.fechaInicio,
     filtros.fechaFin,
@@ -25,6 +27,8 @@ export const ReporteGeneralTable = () => {
   if (error) return <p>Error: {error}</p>;
 
   return (
+    <div>
+      <SectionTitle icon={FileText} title="Reporte General de Ventas" />
     <div className="overflow-x-auto">
     <table className="min-w-full bg-white shadow rounded-xl text-xs text-gray-800">
       <thead className="bg-gray-700 text-white uppercase font-semibold text-center">
@@ -58,7 +62,7 @@ export const ReporteGeneralTable = () => {
     </table>
     <div className="flex justify-between items-center pt-4">
         <button
-          className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-900 disabled:opacity-50"
+          className="px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-900 disabled:opacity-50"
           onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
           disabled={currentPage === 1}
         >
@@ -68,13 +72,14 @@ export const ReporteGeneralTable = () => {
           Página {currentPage} de {totalPages}
         </span>
         <button
-          className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-900 disabled:opacity-50"
+          className="px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-900 disabled:opacity-50"
           onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
           disabled={currentPage === totalPages}
         >
           Siguiente
         </button>
       </div>
+    </div>
     </div>
   );
 };
