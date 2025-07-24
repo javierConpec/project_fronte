@@ -1,0 +1,48 @@
+/* Cambia fondo del calendario */
+.react-datepicker {
+  background-color: #1f2937; 
+  border: 1px solid #4b5563; 
+  color: white;
+  font-family: sans-serif;
+}
+
+/* Días normales */
+.react-datepicker__day {
+  color: white;
+}
+
+/* Día seleccionado */
+.react-datepicker__day--selected,
+.react-datepicker__day--in-range {
+  background-color: #fb7324 !important; 
+  color: white !important;
+  border-radius: 0.375rem;
+}
+
+/* Día de inicio y fin */
+.react-datepicker__day--range-start,
+.react-datepicker__day--range-end {
+  background-color: #fb7324 !important; 
+  color: white !important;
+}
+
+/* Hover */
+.react-datepicker__day:hover {
+  background-color: #ba1a45;
+}
+
+/* Hover para días especiales (inicio y fin del rango) */
+.react-datepicker__day--range-start:hover,
+.react-datepicker__day--range-end:hover {
+  background-color: #ba1a45 ;
+}
+
+/* Icono */
+.react-datepicker__input-container .react-datepicker__calendar-icon {
+  filter: invert(1);
+}
+
+.react-datepicker__close-icon::after {
+  background-color: #ba1a45;
+}
+
