@@ -36,7 +36,7 @@ export interface Inozzle{
 }
 
 export interface Ipoint{
-    id:number;
+    Id:number;
     LogicalNumber:number;
 }
 

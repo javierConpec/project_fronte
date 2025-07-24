@@ -10,7 +10,7 @@ export default function Sidebar() {
   const { visible, setVisible } = useSidebarStore();
   const [reportesOpen, setReportesOpen] = useState(false); //esatdo para el despligue de filtros
   const { setFiltros } = useReporteFiltrosStore();
-   return (
+  return (
     <>
       {visible && (
         <div
@@ -21,7 +21,7 @@ export default function Sidebar() {
 
       <aside
         className={cn(
-          "fixed top-0 left-0 z-40 h-screen bg-gray-800 p-4 pt-4 text-white transition-all duration-300 md:static md:block",
+          "fixed top-0 left-0 z-40 min-h-screen bg-gray-800 p-4 pt-4 text-white transition-all duration-300 md:static md:block",
           !visible && "md:w-16",
           visible ? "w-64" : "w-16"
         )}
@@ -35,15 +35,26 @@ export default function Sidebar() {
         >
           <FiChevronLeft
             size={20}
-            className={cn("transition-transform duration-500", !visible && "rotate-180")}
+            className={cn(
+              "transition-transform duration-500",
+              !visible && "rotate-180"
+            )}
           />
         </button>
 
         <div className="relative h-10 flex items-center justify-center my-5">
           {visible ? (
-            <img src="/logo.png" alt="Logo completo" className="w-36 transition-all duration-300" />
+            <img
+              src="/logo.png"
+              alt="Logo completo"
+              className="w-36 transition-all duration-300"
+            />
           ) : (
-            <img src="/logocompr.png" alt="Logo mini" className="w-10 transition-all duration-300" />
+            <img
+              src="/logocompr.png"
+              alt="Logo mini"
+              className="w-10 transition-all duration-300"
+            />
           )}
         </div>
 
@@ -53,11 +64,11 @@ export default function Sidebar() {
               if (option.label === "Reportes") {
                 return (
                   <li key={option.label}>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center hover:bg-gray-700 justify-between">
                       <a
                         href={option.href}
                         className={cn(
-                          "flex items-center gap-2 rounded p-2 transition-colors hover:bg-gray-700 w-full",
+                          "flex items-center gap-2  rounded p-2 transition-colors   w-full ",
                           !visible && "justify-center",
                           "text-white"
                         )}
@@ -71,10 +82,13 @@ export default function Sidebar() {
                             e.preventDefault(); // evitar redirección si se hace clic en el ícono
                             setReportesOpen((prev) => !prev);
                           }}
-                          className="text-white pr-2"
+                          className="text-white pr-2 "
                         >
                           <FiChevronDown
-                            className={cn("transition-transform", reportesOpen && "rotate-180")}
+                            className={cn(
+                              "transition-transform ",
+                              reportesOpen && "rotate-180"
+                            )}
                           />
                         </button>
                       )}
@@ -82,7 +96,7 @@ export default function Sidebar() {
 
                     {/* Dropdown visible si está abierto */}
                     {reportesOpen && visible && (
-                     <FiltrosReporte onAplicarFiltros={setFiltros} />
+                      <FiltrosReporte onAplicarFiltros={setFiltros} />
                     )}
                   </li>
                 );

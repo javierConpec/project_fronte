@@ -5,8 +5,8 @@ import { filterNozzle, filterPoint, filterProduct } from "../services/reportServ
 
 
 export const useReporteGeneral = (
-  fechaInicioParam?: string,
-  fechaFinParam?: string,
+  fechaInicio?: string,
+  fechaFin?: string,
   idProducto?: number,
   manguera?: number,
   puntoVenta?: number
@@ -15,12 +15,7 @@ export const useReporteGeneral = (
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const today = new Date();
-  const defaultInicio = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split("T")[0];
-  const defaultFin = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split("T")[0];
-
-  const fechaInicio = fechaInicioParam || defaultInicio;
-  const fechaFin = fechaFinParam || defaultFin; useEffect(() => {
+  useEffect(() => {
     
     const fetchData = async () => {
       try {
