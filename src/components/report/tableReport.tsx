@@ -28,7 +28,7 @@ export const ReporteGeneralTable = () => {
 
   return (
     <div>
-      <SectionTitle icon={FileText} title="Reporte General de Ventas" />
+      <SectionTitle icon={FileText} title="REPORTE DE VENTAS" />
     <div className="overflow-x-auto">
     <table className="min-w-full bg-white shadow rounded-xl text-xs text-gray-800">
       <thead className="bg-gray-700 text-white uppercase font-semibold text-center">
