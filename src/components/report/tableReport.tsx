@@ -1,11 +1,13 @@
+import { useState } from "react";
 import { useReporteGeneral } from "../../hooks/reporteHook";
 import { formatDate } from "../../lib/utils";
 import { useReporteFiltrosStore } from "../../store/reporteFiltros.store";
 
 export const ReporteGeneralTable = () => {
   const { filtros } = useReporteFiltrosStore();
-
-  const { data, loading, error } = useReporteGeneral(
+  const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+     const { data, loading, error } = useReporteGeneral(
     filtros.fechaInicio,
     filtros.fechaFin,
     filtros.productoId ?? undefined,
@@ -13,39 +15,66 @@ export const ReporteGeneralTable = () => {
     filtros.puntoId ?? undefined
   );
 
+  
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
+
+ 
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <table className="min-w-full text-sm text-left border border-gray-300">
-      <thead className="bg-gray-100">
+    <div className="overflow-x-auto">
+    <table className="min-w-full bg-white shadow rounded-xl text-xs text-gray-800">
+      <thead className="bg-gray-700 text-white uppercase font-semibold text-center">
         <tr>
-          <th>Fecha</th>
-          <th>Código</th>
-          <th>Producto</th>
-          <th>Manguera</th>
-          <th>Punto Venta</th>
-          <th>Precio</th>
-          <th>Precio Actual</th>
-          <th>Volumen</th>
-          <th>Total</th>
+          <th className="px-2 py-1">Fecha</th>
+          <th className="px-2 py-1">Código</th>
+          <th className="px-2 py-1">Producto</th>
+          <th className="px-2 py-1">Manguera</th>
+          <th className="px-2 py-1">Punto Venta</th>
+          <th className="px-2 py-1">Precio</th>
+          <th className="px-2 py-1">Precio Actual</th>
+          <th className="px-2 py-1">Volumen</th>
+          <th className="px-2 py-1">Total</th>
         </tr>
       </thead>
-      <tbody>
-        {data.map((fila, index) => (
+      <tbody className="divide-y divide-gray-200 text-center">
+        {paginatedData.map((fila, index) => (
           <tr key={index} className="border-t">
-            <td>{formatDate(fila.fecha)}</td>
-            <td>{fila.cod_producto}</td>
-            <td>{fila.producto}</td>
-            <td>{fila.manguera}</td>
-            <td>{fila.punto_venta}</td>
-            <td>{fila.precio}</td>
-            <td>{fila.precio_actual}</td>
-            <td>{fila.volumen}</td>
-            <td>{fila.total}</td>
+            <td className="px-2 py-1">{formatDate(fila.fecha)}</td>
+            <td className="px-2 py-1">{fila.cod_producto}</td>
+            <td className="px-2 py-1">{fila.producto}</td>
+            <td className="px-2 py-1">{fila.manguera}</td>
+            <td className="px-2 py-1">{fila.punto_venta}</td>
+            <td className="px-2 py-1">{fila.precio}</td>
+            <td className="px-2 py-1">{fila.precio_actual}</td>
+            <td className="px-2 py-1">{fila.volumen}</td>
+            <td className="px-2 py-1">{fila.total}</td>
           </tr>
         ))}
       </tbody>
     </table>
+    <div className="flex justify-between items-center pt-4">
+        <button
+          className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-900 disabled:opacity-50"
+          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Anterior
+        </button>
+        <span className="text-sm text-gray-600">
+          Página {currentPage} de {totalPages}
+        </span>
+        <button
+          className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-900 disabled:opacity-50"
+          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          Siguiente
+        </button>
+      </div>
+    </div>
   );
 };
