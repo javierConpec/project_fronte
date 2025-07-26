@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type {AnimatedCounterProps} from "../types/card.type";
+import type {AnimatedCounterProps} from "../../types/card.type";
 
 export const AnimatedCounter = ({
   value,
