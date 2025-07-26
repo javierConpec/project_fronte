@@ -1,4 +1,4 @@
-import type { IreporteGeneral,Inozzle,Ipoint,Iproduct } from "../types/reporte.type";
+import type { IproductFilter,IpointFilter,InozzleFilter, IreporteGeneral } from "../types/reporte.type";
 const API_URL = import.meta.env.PUBLIC_API_URL;
 
 export const getReporteGeneral = async (
@@ -24,23 +24,23 @@ export const getReporteGeneral = async (
 };
 
 //*FILTROS
-export const filterNozzle = async():Promise<Inozzle[]> => {
+export const filterNozzle = async():Promise<InozzleFilter[]> => {
     const response = await fetch (`${API_URL}/filter/Nozzle`)
     if (!response.ok) throw new Error("Error al obtener las mangeueras")
       const data = await response.json();
-      return data as Inozzle[];
+      return data as InozzleFilter[];
 }
 
-export const filterPoint = async():Promise<Ipoint[]> => {
+export const filterPoint = async():Promise<IpointFilter[]> => {
     const response = await fetch (`${API_URL}/filter/Point`)
     if (!response.ok) throw new Error("Error al obtener los puntos de venta")
       const data = await response.json();
-      return data as Ipoint[];
+      return data as IpointFilter[];
 }
 
-export const filterProduct = async():Promise<Iproduct[]> => {
+export const filterProduct = async():Promise<IproductFilter[]> => {
     const response = await fetch (`${API_URL}/filter/Product`)
     if (!response.ok) throw new Error("Error al obtener los productos")
       const data = await response.json();
-      return data as Iproduct[];
+      return data as IproductFilter[];
 }

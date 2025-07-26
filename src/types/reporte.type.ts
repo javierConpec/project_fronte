@@ -30,17 +30,17 @@ export interface PropsFilter  {
 
 
 //*Interfaces para los filtros
-export interface Inozzle{
+export interface InozzleFilter{
     id:number;
     NozzleNumber:number;
 }
 
-export interface Ipoint{
+export interface IpointFilter{
     Id:number;
     LogicalNumber:number;
 }
 
-export interface Iproduct{
+export interface IproductFilter{
     id:number;
     name:string;
 }
