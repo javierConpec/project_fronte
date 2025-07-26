@@ -3,7 +3,7 @@ import type {AnimatedCounterProps} from "../../types/card.type";
 
 export const AnimatedCounter = ({
   value,
-  duration = 2100,
+  duration = 2000,
   prefix = "",
   isMoney = false,
 }: AnimatedCounterProps) => {
