@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getReporteGeneral } from "../services/reportService";
-import type { Iproduct,Ipoint,Inozzle, IreporteGeneral } from "../types/reporte.type";
+import type { IproductFilter,IpointFilter,InozzleFilter, IreporteGeneral } from "../types/reporte.type";
 import { filterNozzle, filterPoint, filterProduct } from "../services/reportService";
 
 
@@ -37,9 +37,9 @@ export const useReporteGeneral = (
 
 
 export const useFiltrosReporte = () => {
-  const [nozzles, setNozzles] = useState<Inozzle[]>([]);
-  const [points, setPoints] = useState<Ipoint[]>([]);
-  const [products, setProducts] = useState<Iproduct[]>([]);
+  const [nozzles, setNozzles] = useState<InozzleFilter[]>([]);
+  const [points, setPoints] = useState<IpointFilter[]>([]);
+  const [products, setProducts] = useState<IproductFilter[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
