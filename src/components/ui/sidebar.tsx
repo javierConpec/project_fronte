@@ -3,7 +3,7 @@ import { cn } from "../../lib/utils";
 import { useSidebarStore } from "../../store/sidebar.store";
 import { FiChevronDown, FiChevronLeft } from "react-icons/fi";
 import { useState } from "react";
-import { FiltrosReporte } from "../report/filterReport";
+import { FiltrosReporte } from "../dropdown/filterReport";
 import { useReporteFiltrosStore } from "../../store/reporteFiltros.store";
 
 export default function Sidebar() {
