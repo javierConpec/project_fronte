@@ -23,7 +23,7 @@
 
 /* Hover */
 .react-datepicker__day:hover {
-  background-color: #ba1a45;
+  background-color: #ba1a45; 
 }
 
 /* Hover para días especiales (inicio y fin del rango) */
