@@ -5,5 +5,6 @@ export const nozzleService = async():Promise<Inozzle[]> => {
     const response = await fetch (`${API_MANUEL}/Nozzle/pivot`)
     if(!response.ok) throw new Error ("Error al obtener las mangueras")
         const data = await response.json()
+    console.log("DATA:", data);
     return data as Inozzle[];
 }
