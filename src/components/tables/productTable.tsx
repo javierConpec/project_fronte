@@ -12,7 +12,7 @@ export function ProductsPage() {
   const [selectedProduct, setSelectedProduct] = useState<Iproduct | null>(null);
   const openModal = (product: Iproduct) => {
     setSelectedProduct(product);
-    setShowModal(true);
+    setShowModal(true); 
   };
 
   const handleModalSubmit = async (data: any) => {
