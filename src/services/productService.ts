@@ -3,7 +3,6 @@ import type { Iproduct, IupdatePriceProduct} from "../types/product.type"
 
 export const productService = async():Promise<Iproduct[]> => {
     const response = await fetch (`${API_MANUEL}/Product`)
-    console.log("API URL:", API_MANUEL);
     if (!response.ok) throw new Error ("Error al obtener los productos")
         const data = await response.json()
     console.log("DATA:", data);
