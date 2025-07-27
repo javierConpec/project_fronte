@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SurtidoresPage from "./SurtidoresPage";
 import {ProductsPage} from "./tables/productTable"
-import ManguerasPage from "./ManguerasPage";
+import { NozzlePage } from "./tables/nozzleTable";
 
 const tabs = [
     { name: "Surtidores", id: "surtidores" },
@@ -34,7 +34,7 @@ export default function ConfiguracionPage() {
             <div className="overflow-x-auto">
                 {activeTab === "surtidores" && <SurtidoresPage />}
                 {activeTab === "combustibles" && <ProductsPage />}
-                {activeTab === "mangueras" && <ManguerasPage />}
+                {activeTab === "mangueras" && <NozzlePage />}
             </div>
         </div>
     );
