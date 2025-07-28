@@ -59,9 +59,7 @@ export function ProductsPage() {
               <tr key={index} className="border-t text-sm">
                 <td className="px-6 py-2">{fila.id}</td>
                 <td className="px-6 py-2">{fila.name}</td>
-                <td className="px-6 py-2">
-                  S/ {Number(fila.currentPrice).toFixed(2)}
-                </td>
+                <td className="px-6 py-2">S/ {Number(fila.currentPrice).toFixed(2)}</td>
                 <td className="px-6 py-2">{fila.internalCode}</td>
                 <td className="px-6 py-2">
                   <button

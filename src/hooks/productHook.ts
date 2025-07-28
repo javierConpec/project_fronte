@@ -27,7 +27,7 @@ const updateProduct = async (updated: IupdatePriceProduct) => {
   try {
     await updatePrice({ id: updated.id, currentPrice: updated.currentPrice }); // solo pasa los campos requeridos
     console.log("Actualizando:", updated);
-    fetchProduct(); // refresca la lista
+    fetchProduct(); //Es para refrescar la lista
   } catch (err) {
     console.error("Error al actualizar el producto:", err);
   }

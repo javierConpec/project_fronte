@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Inozzle } from "../types/nozzle.type";
+import type { Inozzle,InozzleUpdate } from "../types/nozzle.type";
 import { nozzleService } from "../services/nozzleService";
 
 export const useNozzle = () => {
@@ -18,9 +18,23 @@ export const useNozzle = () => {
         }
     };
 
+    const udpateNozzle = async (updated: InozzleUpdate)=>{
+        if(!updated.id || updated.fuelPointId == null || updated.nozzleNumber == null ){
+            console.warn("Faltan datos para actualizar: ", updated)
+            return;
+        }
+        try{
+            await udpateNozzle({id: updated.id, fuelPointId: updated.fuelPointId, nozzleNumber : updated.nozzleNumber, product : updated.product})
+            console.log ("Actualizando: ", updated);
+            fetchNozzle();
+        } catch ( err){
+            console.error("Error al actualizar la manguera: ", err);
+        }
+    };
+
     useEffect(() =>{
         fetchNozzle();
     },[]);
 
-    return {nozzle,loading,error, fetchNozzle};
+    return {nozzle,loading,error, fetchNozzle, udpateNozzle};
 }

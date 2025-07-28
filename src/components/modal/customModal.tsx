@@ -3,7 +3,7 @@ import type {modalCustomProps} from "../../types/modal.type"
 import { SectionTitle } from "../sectionTitle";
 import { PencilIcon } from "lucide-react";
 
-export const CustomModal = ({isOpen,inputs,onClose,onSubmit,title,disabled}:modalCustomProps)=>{
+export const CustomModal = ({isOpen,inputs,onClose,onSubmit,title,disabled,optionalComponent}:modalCustomProps)=>{
     const [formData, setFormData] = useState<Record<string, string | number>>(
     () =>
       inputs.reduce((acc, curr) => {
@@ -42,6 +42,11 @@ export const CustomModal = ({isOpen,inputs,onClose,onSubmit,title,disabled}:moda
               />
             </div>
           ))}
+          {optionalComponent && (
+  <div className="mt-4">
+    {optionalComponent}
+  </div>
+)}
         </div>
         <div className="flex justify-end mt-8 space-x-2">
           <button

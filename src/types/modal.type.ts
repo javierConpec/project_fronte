@@ -13,4 +13,5 @@ export interface modalCustomProps{
     disabled?: boolean;
     onClose: () => void;
     onSubmit: (formData: Record<string, string | number>) => void;
+    optionalComponent?: React.ReactNode;
 }
