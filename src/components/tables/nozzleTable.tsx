@@ -1,6 +1,5 @@
 import { useNozzle } from "../../hooks/nozzleHook";
 import { useProduct } from "../../hooks/productHook";
-import { useDispenser } from "../../hooks/dispenserHook";
 import { RiGasStationFill } from "react-icons/ri";
 import { SectionTitle } from "../sectionTitle";
 import type { Inozzle } from "../../types/nozzle.type";
@@ -8,6 +7,7 @@ import { useState } from "react";
 import { CustomModal } from "../modal/customModal";
 import { Pencil } from "lucide-react";
 import { CustomDropdown } from "../dropdown/CustomDropDown";
+import { getValidNozzles } from "../../lib/utils";
 
 export function NozzlePage() {
   const { nozzle, loading, error, udpateNozzle } = useNozzle();
@@ -18,27 +18,6 @@ export function NozzlePage() {
   const [mangueraId, setMangueraId] = useState<number | null>(null);
   const [selectNozzle, setSelectNozzle] = useState<Inozzle | null>(null);
 
-  const getValidNozzles = (fuelPointId: number | null) => {
-    const fuelPoint = nozzle.find((n) => n.fuelPointId === fuelPointId);
-    if (!fuelPoint) return [];
-
-    const result: { id: number; label: string }[] = [];
-
-    for (let i = 1; i <= 6; i++) {
-      const id = fuelPoint[`idNozzle${i}` as keyof typeof fuelPoint];
-      const name = fuelPoint[`nozzle${i}` as keyof typeof fuelPoint];
-      if (
-        typeof id === "number" &&
-        id !== 0 &&
-        typeof name === "string" &&
-        name !== ""
-      ) {
-        result.push({ id, label: `Manguera ${i} - ${name}` });
-      }
-    }
-
-    return result;
-  };
 
   const openModal = (nozzle: Inozzle) => {
     setSelectNozzle(nozzle);
@@ -152,7 +131,7 @@ export function NozzlePage() {
             <>
               <CustomDropdown
                 label="Manguera"
-                options={getValidNozzles(selectNozzle.fuelPointId)}
+                options={getValidNozzles(selectNozzle.fuelPointId, nozzle)}
                 onSelect={(id) => setMangueraId(id)}
                 variant="minimal"
               />
