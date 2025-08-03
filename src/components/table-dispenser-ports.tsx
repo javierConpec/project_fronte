@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+/*import { useEffect, useState } from "react"
 import { BaseTable } from "./ui/data-table"
 import type { DispenserPort } from "../types/dispenser-port.type"
 import { getDispenserPorts } from "../services/dispenserPortService"
@@ -19,3 +19,4 @@ export function TableDispenserPorts() {
 
   return <BaseTable data={data} columns={dispenserPortColumns} />
 }
+*/

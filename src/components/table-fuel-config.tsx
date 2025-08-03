@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+/*import { useEffect, useState } from "react"
 import { BaseTable } from "./ui/data-table"
 import type { FuelConfig } from "../types/fuel.type"
 import { getFuelConfig } from "../services/fuelConfigService"
@@ -19,3 +19,4 @@ export function TableFuelConfig() {
 
   return <BaseTable data={data} columns={fuelConfigColumns} />
 }
+*/
