@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Iproduct,IupdatePriceProduct} from "../types/product.type";
-import { productService, updatePrice } from "../services/productService";
+import { productService, updatePriceService } from "../services/productService";
 
 export const useProduct = () => {
   const [products, setProducts] = useState<Iproduct[]>([]);
@@ -25,7 +25,7 @@ const updateProduct = async (updated: IupdatePriceProduct) => {
     return;
   }
   try {
-    await updatePrice({ id: updated.id, currentPrice: updated.currentPrice }); // solo pasa los campos requeridos
+    await updatePriceService({ id: updated.id, currentPrice: updated.currentPrice }); // solo pasa los campos requeridos
     console.log("Actualizando:", updated);
     fetchProduct(); //Es para refrescar la lista
   } catch (err) {
