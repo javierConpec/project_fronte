@@ -1,4 +1,4 @@
-import { Pencil } from "lucide-react"
+/*import { Pencil } from "lucide-react"
 import type { DispenserPort } from "../types/dispenser-port.type"
 import type { Column } from "../components/ui/data-table"
 
@@ -31,3 +31,4 @@ export const dispenserPortColumns: Column<DispenserPort>[] = [
     accessor: "baudRate",
   },
 ]
+*/

@@ -1,4 +1,4 @@
-import { Pencil } from "lucide-react"
+/*import { Pencil } from "lucide-react"
 import type { Column } from "../components/ui/data-table"
 import type { FuelConfig } from "../types/fuel.type"
 
@@ -27,3 +27,4 @@ export const fuelConfigColumns: Column<FuelConfig>[] = [
   { header: "Porcentaje de mezcla", accessor: "mixPercentage" },
   { header: "Tanque mezclado 2", accessor: "mixedTank2" },
 ]
+*/
