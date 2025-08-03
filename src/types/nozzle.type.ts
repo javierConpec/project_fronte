@@ -19,5 +19,5 @@ export interface InozzleUpdate{
     id: number;
     fuelPointId:number;
     nozzleNumber:number;
-    product: string;
+    productId: number;
 }
