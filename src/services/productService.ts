@@ -10,7 +10,7 @@ export const productService = async():Promise<Iproduct[]> => {
     
 }
 
-export const updatePrice = async (data: IupdatePriceProduct) => {
+export const updatePriceService = async (data: IupdatePriceProduct) => {
   try {
     const response = await fetch(`${API_MANUEL}/Product/update`, {
       method: "POST",
