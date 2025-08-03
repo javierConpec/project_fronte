@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { BaseTable } from "./ui/data-table"
-import type { DispenserConfig } from "../types/dispenser-config"
+import type { DispenserConfig } from "../types/dispensder-config"
 import { getDispenserConfig } from "../services/dispenserConfigService"
 import { dispenserConfigColumns } from "../lib/dispenser-config-columns"
 

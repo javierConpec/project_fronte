@@ -1,4 +1,4 @@
-import type { DispenserConfig } from "../types/dispenser-config"
+import type { DispenserConfig } from "../types/dispensder-config"
 
 export async function getDispenserConfig(): Promise<DispenserConfig[]> {
   // const response = await fetch("/api/dispenser-config")

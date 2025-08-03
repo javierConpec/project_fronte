@@ -1,5 +1,5 @@
 import type { Column } from "../components/ui/data-table"
-import type { DispenserConfig } from "../types/dispenser-config"
+import type { DispenserConfig } from "../types/dispensder-config"
 import { Pencil } from "lucide-react"
 
 export const dispenserConfigColumns: Column<DispenserConfig>[] = [
