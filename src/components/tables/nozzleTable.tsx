@@ -1,4 +1,6 @@
 import { useNozzle } from "../../hooks/nozzleHook";
+import { useProduct } from "../../hooks/productHook";
+import { useDispenser } from "../../hooks/dispenserHook";
 import { RiGasStationFill } from "react-icons/ri";
 import { SectionTitle } from "../sectionTitle";
 import type { Inozzle } from "../../types/nozzle.type";
@@ -6,29 +8,57 @@ import { useState } from "react";
 import { CustomModal } from "../modal/customModal";
 import { Pencil } from "lucide-react";
 import { CustomDropdown } from "../dropdown/CustomDropDown";
-import { useFiltrosReporte } from "../../hooks/reporteHook";
 
 export function NozzlePage() {
-  const { nozzle, loading, error, udpateNozzle} = useNozzle();
-  const { nozzles, points, products } = useFiltrosReporte();
- const [productoId, setProductoId] = useState<number | null>(null);
+  const { nozzle, loading, error, udpateNozzle } = useNozzle();
+  const { products } = useProduct();
+  const [selectedFuelPointId, setSelectedFuelPointId] = useState<number>(0);
+  const [productoId, setProductoId] = useState<number | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [mangueraId, setMangueraId] = useState<number | null>(null);
   const [selectNozzle, setSelectNozzle] = useState<Inozzle | null>(null);
+
+  const getValidNozzles = (fuelPointId: number | null) => {
+    const fuelPoint = nozzle.find((n) => n.fuelPointId === fuelPointId);
+    if (!fuelPoint) return [];
+
+    const result: { id: number; label: string }[] = [];
+
+    for (let i = 1; i <= 6; i++) {
+      const id = fuelPoint[`idNozzle${i}` as keyof typeof fuelPoint];
+      const name = fuelPoint[`nozzle${i}` as keyof typeof fuelPoint];
+      if (
+        typeof id === "number" &&
+        id !== 0 &&
+        typeof name === "string" &&
+        name !== ""
+      ) {
+        result.push({ id, label: `Manguera ${i} - ${name}` });
+      }
+    }
+
+    return result;
+  };
+
   const openModal = (nozzle: Inozzle) => {
     setSelectNozzle(nozzle);
     setShowModal(true);
   };
 
-   const handleModalSubmit = async (data: any) => {
+  const handleModalSubmit = async (data: any) => {
     try {
       if (!selectNozzle) return;
 
+      if (!mangueraId || productoId === null) {
+        console.warn("Todos los campos deben estar seleccionados");
+        return;
+      }
+
       await udpateNozzle({
-        ...selectNozzle,
-        id: data.id,
-        fuelPointId: data.currentPrice,
-        nozzleNumber: data.nozzleNumber,
-        product: data.product,
+        id: mangueraId,
+        fuelPointId: selectedFuelPointId,
+        nozzleNumber: mangueraId,
+        productId: productoId,
       });
 
       setShowModal(false);
@@ -110,13 +140,32 @@ export function NozzlePage() {
               value: selectNozzle.fuelPointId,
               disabled: true,
             },
+            {
+              name: "Surtidor",
+              label: "Surtidor",
+              type: "String",
+              value: `Surtidor ${selectNozzle.fuelPointId}`,
+              disabled: true,
+            },
           ]}
           optionalComponent={
-            <CustomDropdown
-              label="Producto"
-              options={products.map((p) => ({ id: p.id, label: p.name }))}
-              onSelect={(id) => setProductoId(id)}
-            />
+            <>
+              <CustomDropdown
+                label="Manguera"
+                options={getValidNozzles(selectNozzle.fuelPointId)}
+                onSelect={(id) => setMangueraId(id)}
+                variant="minimal"
+              />
+
+              {mangueraId !== null && (
+                <CustomDropdown
+                label="Producto"
+                options={products.map((p) => ({ id: p.id, label: p.name }))}
+                onSelect={(id) => setProductoId(id)}
+                variant="minimal"
+              />
+              )}
+            </>
           }
         />
       )}
