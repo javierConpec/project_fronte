@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Idispenser } from "../types/dispenser.type";
-import { dispencerService } from "../services/dispenserService";
+import { dispenserService } from "../services/dispenserService";
 
 export const useDispenser = () =>{
     const [dispenser, setDispenser] = useState<Idispenser[]>([]);
@@ -9,7 +9,7 @@ export const useDispenser = () =>{
 
     const fetchDispenser = async () =>{
         try{
-            const [dispenserData] = await Promise.all([dispencerService()]);
+            const [dispenserData] = await Promise.all([dispenserService()]);
             setDispenser(dispenserData);
         }catch (err: any){
             setError(err.message || "Error al obtener los Surtidores")
