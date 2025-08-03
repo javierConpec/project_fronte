@@ -36,23 +36,22 @@ export const useReporteGeneral = (
 
 
 
-export const useFiltrosReporte = () => {
+export const useFiltrosReporte = (fuelpointId: number) => {
   const [nozzles, setNozzles] = useState<InozzleFilter[]>([]);
   const [points, setPoints] = useState<IpointFilter[]>([]);
   const [products, setProducts] = useState<IproductFilter[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+ 
   useEffect(() => {
     const fetchFiltros = async () => {
       try {
-        const [nozzleData, pointData, productData] = await Promise.all([
-          filterNozzle(),
+        const [pointData, productData] = await Promise.all([
           filterPoint(),
           filterProduct(),
         ]);
 
-        setNozzles(nozzleData);
         setPoints(pointData);
         setProducts(productData);
       } catch (err: any) {
@@ -64,6 +63,23 @@ export const useFiltrosReporte = () => {
 
     fetchFiltros();
   }, []);
+
+ 
+  useEffect(() => {
+    if (fuelpointId === null || fuelpointId === undefined) return;
+
+    const fetchNozzles = async () => {
+      try {
+        const data = await filterNozzle(fuelpointId);
+        setNozzles(data);
+      } catch (error) {
+        console.error("Error al cargar mangueras:", error);
+        setNozzles([]);
+      }
+    };
+
+    fetchNozzles();
+  }, [fuelpointId]);
 
   return { nozzles, points, products, loading, error };
 };

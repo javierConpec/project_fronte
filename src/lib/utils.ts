@@ -15,3 +15,4 @@ export function formatPrice(value: unknown): string {
 export const formatDate = (isoDate: string): string => {
   return new Date(isoDate).toISOString().split("T")[0];
 };
+
