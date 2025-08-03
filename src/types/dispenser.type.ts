@@ -1,12 +1,11 @@
-export type Dispenser = {
-  dispenser: number
-  status: string
-  hose: number
-  price: number
-  filledVolume: number
-  filledAmount: number
-  totalVolume: number
-  totalAmount: number
-  user: string
-  request: string  
+export interface Idispenser {
+    id:number;
+    logicalNumber:number;
+    physicalAddress: number;
+    nozzleQuantity:number;
+    factorVolume: number;
+    factorAmount : number;
+    factorContometer: number;
+    bitCConfigurationId:number;
+    ptsControllerId: number;
 }
