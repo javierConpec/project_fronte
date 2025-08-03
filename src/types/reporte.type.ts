@@ -13,6 +13,7 @@ export interface IreporteGeneral {
 
 
  export interface Filtros  {
+  mangueraId: number | null;
   productoId: number | null;
   puntoId: number | null;
   fechaInicio: string;
