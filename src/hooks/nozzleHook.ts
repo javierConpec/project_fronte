@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Inozzle,InozzleUpdate } from "../types/nozzle.type";
-import { nozzleService } from "../services/nozzleService";
+import { nozzleService,nozzleUpdateService } from "../services/nozzleService";
 
 export const useNozzle = () => {
     const [nozzle, setNozzle] = useState<Inozzle[]>([]);
@@ -24,7 +24,7 @@ export const useNozzle = () => {
             return;
         }
         try{
-            await udpateNozzle({id: updated.id, fuelPointId: updated.fuelPointId, nozzleNumber : updated.nozzleNumber, product : updated.product})
+            await nozzleUpdateService({id: updated.id, fuelPointId: updated.fuelPointId, nozzleNumber : updated.nozzleNumber, productId : updated.productId})
             console.log ("Actualizando: ", updated);
             fetchNozzle();
         } catch ( err){
