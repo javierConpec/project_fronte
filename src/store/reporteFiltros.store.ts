@@ -7,6 +7,7 @@ export const useReporteFiltrosStore = create<FiltroStore>((set) => ({
     fechaInicio: "",
     fechaFin: "",
     productoId: null,
+    mangueraId:null,
     puntoId: null,
   },
   setFiltros: (nuevos) => set({ filtros: nuevos }),
