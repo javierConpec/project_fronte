@@ -24,8 +24,8 @@ export const getReporteGeneral = async (
 };
 
 //*FILTROS
-export const filterNozzle = async():Promise<InozzleFilter[]> => {
-    const response = await fetch (`${API_URL}/filter/Nozzle`)
+export const filterNozzle = async(fuelpointId: number):Promise<InozzleFilter[]> => {
+    const response = await fetch (`${API_URL}/filter/Nozzle?fuelpointId=${fuelpointId}`)
     if (!response.ok) throw new Error("Error al obtener las mangeueras")
       const data = await response.json();
       return data as InozzleFilter[];
