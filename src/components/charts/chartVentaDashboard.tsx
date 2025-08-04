@@ -2,6 +2,7 @@ import { useVentas } from "../../hooks/chartHook";
 import { Chart, registerables } from "chart.js";
 import { useEffect, useRef } from "react";
 import { formatDate } from "../../lib/utils";
+import { Loader } from "../loader";
 
 //Vamos a regisrtrar los elementos que usaremos (por la version no se registran auto)
 Chart.register(...registerables);
@@ -101,7 +102,7 @@ export const ChartVentaDashboard = () => {
     });
   }, [ventas, loading, error]);
 
-  if (loading) return <p>Cargando gráfico...</p>;
+    if (loading) return <Loader />;
   if (error) return <p>Error al cargar ventas: {error}</p>;
 
   return (

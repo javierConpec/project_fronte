@@ -1,5 +1,6 @@
 import {useTotalAmount,useTotalHoy,useTotalNozzles,useTotalVolume,} from "../../hooks/cardHook";
 import { iconsMap } from "../../styles/iconCard";
+import { Loader } from "../loader";
 import { AnimatedCounter } from "./animateCounter";
 
 export const CardDashboard = () => {
@@ -9,7 +10,7 @@ export const CardDashboard = () => {
   const {totalVolume,loading: loadingVolume,error: errorVolume,} = useTotalVolume();
 
   if (loadingAmount || loadingHoy || loadingNozzles || loadingVolume) {
-    return <p>Cargando datos...</p>;
+    return <Loader/>;
   }
 
   if (errorAmount || errorHoy || errorNozzles || errorVolume) {

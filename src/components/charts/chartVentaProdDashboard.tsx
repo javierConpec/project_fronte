@@ -2,6 +2,7 @@ import { useVentasPorProducto } from "../../hooks/chartHook";
 import { Chart, registerables } from "chart.js";
 import { useEffect, useRef } from "react";
 import { formatPrice } from "../../lib/utils";
+import { Loader } from "../loader";
 
 Chart.register(...registerables);
 
@@ -82,7 +83,7 @@ export const ChartBarraProductos = () => {
     });
   }, [ventasPorProducto, loading, error]);
 
-  if (loading) return <p>Cargando gráfico...</p>;
+  if (loading) return <Loader />;
   if (error) return <p>Error al cargar ventas: {error}</p>;
 
   return (

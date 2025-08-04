@@ -4,6 +4,7 @@ import {
 } from "../../hooks/chartHook";
 import { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
+import { Loader } from "../loader";
 
 export const ChartMangueras = () => {
   const [selectedFuelPoint, setSelectedFuelPoint] = useState<
@@ -73,7 +74,7 @@ export const ChartMangueras = () => {
   return (
     <div className="bg-white rounded-lg shadow-xl w-1/2 h-[400px] mt-5 p-4">
       <div ref={chartRef} className="w-full h-[300px]"></div>
-      {loading && <p className="text-sm text-gray-500">Cargando datos...</p>}
+      {loading && <Loader/>}
       {error && (
         <p className="text-sm text-red-500">
           Error al cargar los datos: {error}
