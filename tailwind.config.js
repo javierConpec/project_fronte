@@ -3,20 +3,23 @@ module.exports = {
   content: ["./src/**/*.{astro,html,js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      animation: {
+        "fade-in": "fadeIn 1.5s ease-out forwards",
+        spin: "spin 1s linear infinite",
+      },
+      transformOrigin: {
+        top: "top",
+      },
       keyframes: {
-        fadeInOut: {
-          '0%': { opacity: 0, transform: 'translateY(-10px)' },
-          '50%': { opacity: 1, transform: 'translateY(0)' },
-          '100%': { opacity: 0, transform: 'translateY(10px)' },
-        },
-        bounceSlow: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-8px)' },
+        fadeIn: {
+          "0%": { opacity: 0, transform: "translateY(-15px)" },
+          "100%": { opacity: 1, transform: "translateY(0)" },
         },
       },
-      animation: {
-        'fade-in-out': 'fadeInOut 1s ease-out forwards',
-        'bounce-slow': 'bounceSlow 1.5s forwards',
+      variants: {
+        extend: {
+          scale: ["group-hover"],
+        },
       },
     },
   },
