@@ -1,5 +1,5 @@
 const API_MANUEL = import.meta.env.PUBLIC_API_URL_2;
-import type { Iproduct, IupdatePriceProduct} from "../types/product.type"
+import type { Iproduct, IupdateProduct} from "../types/product.type"
 
 export const productService = async():Promise<Iproduct[]> => {
     const response = await fetch (`${API_MANUEL}/Product`)
@@ -10,7 +10,7 @@ export const productService = async():Promise<Iproduct[]> => {
     
 }
 
-export const updatePriceService = async (data: IupdatePriceProduct) => {
+export const updateProductService = async (data: IupdateProduct) => {
   try {
     const response = await fetch(`${API_MANUEL}/Product/update`, {
       method: "POST",

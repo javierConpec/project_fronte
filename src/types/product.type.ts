@@ -7,7 +7,11 @@ export interface Iproduct {
     needsUpdate:boolean;
 }
 
-export interface IupdatePriceProduct {
+export interface IupdateProduct {
   id: number;
+  name:string;
   currentPrice: number;
+  internalCode: string;
+  active: boolean;
+  needsUpdate:boolean
 }

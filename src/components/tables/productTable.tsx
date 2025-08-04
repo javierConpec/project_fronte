@@ -5,6 +5,8 @@ import { RiGasStationFill } from "react-icons/ri";
 import type { Iproduct } from "../../types/product.type";
 import { CustomModal } from "../modal/customModal";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function ProductsPage() {
   const { products, loading, error, updateProduct } = useProduct();
@@ -12,7 +14,7 @@ export function ProductsPage() {
   const [selectedProduct, setSelectedProduct] = useState<Iproduct | null>(null);
   const openModal = (product: Iproduct) => {
     setSelectedProduct(product);
-    setShowModal(true); 
+    setShowModal(true);
   };
 
   const handleModalSubmit = async (data: any) => {
@@ -22,19 +24,18 @@ export function ProductsPage() {
       await updateProduct({
         ...selectedProduct,
         id: data.id,
+        name: data.name,
         currentPrice: data.currentPrice,
       });
-
+      toast.success("Producto actualizado exitosamente");
       setShowModal(false);
     } catch (error) {
+      toast.error("Error al actualizar el producto");
       console.error("Error al actualizar:", error);
     }
   };
 
-  /* const handleToggleActive = (products: Iproduct) => {
-    toggleActive(products);
-  };
-*/
+  
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -59,11 +60,31 @@ export function ProductsPage() {
               <tr key={index} className="border-t text-sm">
                 <td className="px-6 py-2">{fila.id}</td>
                 <td className="px-6 py-2">{fila.name}</td>
-                <td className="px-6 py-2">S/ {Number(fila.currentPrice).toFixed(2)}</td>
+                <td className="px-6 py-2">
+                  S/ {Number(fila.currentPrice).toFixed(2)}
+                </td>
                 <td className="px-6 py-2">{fila.internalCode}</td>
                 <td className="px-6 py-2">
                   <button
-                    //oclick -> falta habilitar endpoint
+                    onClick={async () => {
+                      try {
+                        await updateProduct({
+                          id: fila.id,
+                          name: fila.name,
+                          currentPrice: fila.currentPrice,
+                          internalCode: fila.internalCode,
+                          active: !fila.active,
+                          needsUpdate: fila.needsUpdate,
+                        });
+                        toast.success(
+                          `Estado actualizado: ${
+                            !fila.active ? "Activado" : "Desactivado"
+                          }`
+                        );
+                      } catch (error) {
+                        toast.error("Error al actualizar el estado");
+                      }
+                    }}
                     className={`w-11 h-6 rounded-full transition-colors duration-300 ${
                       fila.active ? "bg-gray-500" : "bg-gray-100 border "
                     }`}
@@ -122,7 +143,6 @@ export function ProductsPage() {
               label: "Nombre",
               type: "text",
               value: selectedProduct.name,
-              disabled: true,
             },
             {
               name: "currentPrice",
@@ -133,6 +153,8 @@ export function ProductsPage() {
           ]}
         />
       )}
+      
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 }
