@@ -143,6 +143,7 @@ export function ProductsPage() {
               label: "Nombre",
               type: "text",
               value: selectedProduct.name,
+              disabled: true,
             },
             {
               name: "currentPrice",
