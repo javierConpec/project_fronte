@@ -41,10 +41,10 @@ export function NozzlePage() {
         nozzleNumber: mangueraId,
         productId: productoId,
       });
-      toast.success("Producto actualizado exitosamente");
+      toast.success("MAnguera actualizado exitosamente");
       setShowModal(false);
     } catch (error) {
-      toast.error("Error al actualizar el producto");
+      toast.error("Error al actualizar el MAnguera");
       console.error("Error al actualizar:", error);
     }
   };
