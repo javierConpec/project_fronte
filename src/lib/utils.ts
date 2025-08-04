@@ -10,6 +10,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+//Funcion para darle un buen formato de precio
 export function formatPrice(value: unknown): string {
   const num = typeof value === "number" ? value : Number(value);
   if (isNaN(num)) return "S/ 0.00";
@@ -17,10 +18,13 @@ export function formatPrice(value: unknown): string {
 }
 
 
+//funcion para darle formate de fecha reducida
 export const formatDate = (isoDate: string): string => {
   return new Date(isoDate).toISOString().split("T")[0];
 };
 
+
+//funcion para traer todoas las mangueras en lista con su producto
 export function getValidNozzles(fuelPointId: number | null, nozzleList: Inozzle[]) {
   const fuelPoint = nozzleList.find((n) => n.fuelPointId === fuelPointId);
   if (!fuelPoint) return [];

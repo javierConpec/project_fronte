@@ -8,6 +8,8 @@ import { CustomModal } from "../modal/customModal";
 import { Pencil } from "lucide-react";
 import { CustomDropdown } from "../dropdown/CustomDropDown";
 import { getValidNozzles } from "../../lib/utils";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function NozzlePage() {
   const { nozzle, loading, error, udpateNozzle } = useNozzle();
@@ -39,9 +41,10 @@ export function NozzlePage() {
         nozzleNumber: mangueraId,
         productId: productoId,
       });
-
+      toast.success("Producto actualizado exitosamente");
       setShowModal(false);
     } catch (error) {
+      toast.error("Error al actualizar el producto");
       console.error("Error al actualizar:", error);
     }
   };
@@ -56,20 +59,20 @@ export function NozzlePage() {
         <table className="w-full">
           <thead className="bg-gray-700 text-sm uppercase font-semibold text-white text-center">
             <tr>
-              <th className="px-6 py-3">N° Surtidor</th>
-              <th className="px-6 py-3">N° Tanque</th>
-              <th className="px-6 py-3">Producto</th>
-              <th className="px-6 py-3">N° Tanque</th>
-              <th className="px-6 py-3">Producto</th>
-              <th className="px-6 py-3">N° Tanque</th>
-              <th className="px-6 py-3">Producto</th>
-              <th className="px-6 py-3">N° Tanque</th>
-              <th className="px-6 py-3">Producto</th>
-              <th className="px-6 py-3">N° Tanque</th>
-              <th className="px-6 py-3">Producto</th>
-              <th className="px-6 py-3">N° Tanque</th>
-              <th className="px-6 py-3">Producto</th>
-              <th className="px-6 py-3">Acciones</th>
+              <th className="px-3 py-3">N° Surtidor</th>
+              <th className="px-3 py-3">N° Tanque</th>
+              <th className="px-3 py-3">Producto</th>
+              <th className="px-3 py-3">N° Tanque</th>
+              <th className="px-3 py-3">Producto</th>
+              <th className="px-3 py-3">N° Tanque</th>
+              <th className="px3 py-3">Producto</th>
+              <th className="px-3 py-3">N° Tanque</th>
+              <th className="px-3 py-3">Producto</th>
+              <th className="px-3 py-3">N° Tanque</th>
+              <th className="px-3 py-3">Producto</th>
+              <th className="px-3 py-3">N° Tanque</th>
+              <th className="px-3 py-3">Producto</th>
+              <th className="px-3 py-3">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200  text-center">
@@ -148,6 +151,7 @@ export function NozzlePage() {
           }
         />
       )}
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 }

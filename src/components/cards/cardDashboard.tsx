@@ -52,7 +52,7 @@ export const CardDashboard = () => {
         <div className="flex flex-col mx-4">
           <h3 className="text-lg font-bold text-slate-100">VENTA TOTAL</h3>
           <p className="text-3xl font-bold text-slate-100">
-             <AnimatedCounter value={totalAmount?.totalAmount ?? 0} isMoney />
+            <AnimatedCounter value={totalAmount?.totalAmount ?? 0} isMoney />
           </p>
         </div>
         <div className="mr-5">{iconsMap["VentaTotal"]}</div>

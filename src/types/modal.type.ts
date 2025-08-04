@@ -2,7 +2,7 @@ interface inputCustom {
     name:string;
     label: string;
     type?: string;
-    value?: string | number;
+    value?: string | number | boolean;
     disabled?: boolean;
 }
 

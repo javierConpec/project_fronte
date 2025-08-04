@@ -3,10 +3,10 @@ import { Chart, registerables } from "chart.js";
 import { useEffect, useRef } from "react";
 import { formatDate } from "../../lib/utils";
 
-//Vamos a regisrtrar los elementos que usaremos
+//Vamos a regisrtrar los elementos que usaremos (por la version no se registran auto)
 Chart.register(...registerables);
 
-const ChartVentaDashboard = () => {
+export const ChartVentaDashboard = () => {
   const { ventas, loading, error } = useVentas();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
@@ -111,4 +111,4 @@ const ChartVentaDashboard = () => {
   );
 };
 
-export default ChartVentaDashboard;
+

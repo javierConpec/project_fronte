@@ -16,7 +16,7 @@ export const ReporteGeneralTable = () => {
     filtros.fechaInicio,
     filtros.fechaFin,
     filtros.productoId ?? undefined,
-    undefined, // manguera
+    filtros.mangueraId?? undefined,
     filtros.puntoId ?? undefined
   );
 
@@ -36,6 +36,7 @@ export const ReporteGeneralTable = () => {
 
   return (
     <div>
+      <div className="p-6 bg-white rounded-2xl shadow-xl">
       <div className="overflow-x-auto  ">
         <div className="flex items-start justify-between px-5 mb-4">
           <SectionTitle icon={FileText} title="REPORTE DE VENTAS" />
@@ -49,7 +50,7 @@ export const ReporteGeneralTable = () => {
           </button>
         </div>
 
-        <table className="min-w-[98%] m-auto  bg-white shadow-xl rounded-xl  text-gray-800 mt-2">
+        <table className="min-w-full m-auto    text-gray-800 mt-2">
           <thead className="bg-gray-700 text-white uppercase font-extrabold text-center">
             <tr>
               <th className="px-3 py-3">Fecha</th>
@@ -99,6 +100,7 @@ export const ReporteGeneralTable = () => {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 };
