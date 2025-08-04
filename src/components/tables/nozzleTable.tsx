@@ -60,17 +60,17 @@ export function NozzlePage() {
           <thead className="bg-gray-700 text-sm uppercase font-semibold text-white text-center">
             <tr>
               <th className="px-3 py-3">N° Surtidor</th>
-              <th className="px-3 py-3">N° Tanque</th>
+              <th className="px-3 py-3">N° Manguera</th>
               <th className="px-3 py-3">Producto</th>
-              <th className="px-3 py-3">N° Tanque</th>
+              <th className="px-3 py-3">N° Manguera</th>
               <th className="px-3 py-3">Producto</th>
-              <th className="px-3 py-3">N° Tanque</th>
+              <th className="px-3 py-3">N° Manguera</th>
               <th className="px3 py-3">Producto</th>
-              <th className="px-3 py-3">N° Tanque</th>
+              <th className="px-3 py-3">N° Manguera</th>
               <th className="px-3 py-3">Producto</th>
-              <th className="px-3 py-3">N° Tanque</th>
+              <th className="px-3 py-3">N° Manguera</th>
               <th className="px-3 py-3">Producto</th>
-              <th className="px-3 py-3">N° Tanque</th>
+              <th className="px-3 py-3">N° Manguera</th>
               <th className="px-3 py-3">Producto</th>
               <th className="px-3 py-3">Acciones</th>
             </tr>
