@@ -7,6 +7,6 @@ export interface DropdownProps {
   label: string;
   options: Option[];
   variant: string;
-  onSelect: (id: number) => void;
+  onSelect: (id: number | null) => void;
   selectedId?: number;
 }

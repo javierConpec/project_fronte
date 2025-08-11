@@ -59,12 +59,14 @@ export const FiltrosReporte = ({ onAplicarFiltros }: PropsFilter) => {
           }))}
           onSelect={(id) => {
             setPuntoId(id);
-            setSelectedFuelPointId(id);
+            if (id !== null) {
+              setSelectedFuelPointId(id);
+            }
           }}
           variant="default"
         />
 
-        {selectedFuelPointId !== 0 && (
+        {selectedFuelPointId !== 0  && (
           <CustomDropdown
             label="Manguera"
             options={nozzles.map((n) => ({
