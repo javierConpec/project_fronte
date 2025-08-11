@@ -1,23 +1,21 @@
 
 export interface IreporteGeneral {
-  fecha: string;
-  cod_producto: string;
+  surtidor: number;
   producto: string;
   manguera: number;
-  punto_venta: number;
-  precio: number;
-  precio_actual: number;
-  volumen: number;
-  total: number;
+  precio : string;
+  cantidad: string;
+  valor: string;
+  contometroInicial: string;
+  contometroFinal: string;
+  consumoReal: string;
 }
 
 
  export interface Filtros  {
   mangueraId: number | null;
-  productoId: number | null;
   puntoId: number | null;
-  fechaInicio: string;
-  fechaFin: string;
+  fecha: string;
 };
 
 export type FiltroStore = {

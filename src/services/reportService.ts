@@ -2,25 +2,24 @@ import type { IproductFilter,IpointFilter,InozzleFilter, IreporteGeneral } from 
 const API_URL = import.meta.env.PUBLIC_API_URL;
 
 export const getReporteGeneral = async (
-  fechaInicio?: string,
-  fechaFin?: string,
-  idProducto?: number,
+  fecha?: string,
   manguera?: number,
   puntoVenta?: number
 ): Promise<IreporteGeneral[]> => {
   const params = new URLSearchParams();
 
-  if (fechaInicio) params.append("fechaInicio", fechaInicio);
-  if (fechaFin) params.append("fechaFin", fechaFin);
-  if (idProducto) params.append("idProducto", idProducto.toString());
+  if (fecha) params.append("fecha", fecha);
   if (manguera) params.append("manguera", manguera.toString());
   if (puntoVenta) params.append("puntoVenta", puntoVenta.toString());
 
-  const response = await fetch(`${API_URL}/report/general?${params.toString()}`);
-
+  const response = await fetch(`${API_URL}/report/contometro?${params.toString()}`);
+console.log("✅ Parámetros enviados al backend:", params.toString());
   if (!response.ok) throw new Error("Error al obtener el reporte");
 
-  return await response.json();
+  const data = await response.json();
+  console.log("✅ Respuesta cruda del backend:", JSON.parse(JSON.stringify(data)));
+
+  return data;
 };
 
 //*FILTROS

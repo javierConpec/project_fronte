@@ -4,9 +4,7 @@ import type {FiltroStore} from  "../types/reporte.type"
 
 export const useReporteFiltrosStore = create<FiltroStore>((set) => ({
   filtros: {
-    fechaInicio: "",
-    fechaFin: "",
-    productoId: null,
+    fecha: "",
     mangueraId:null,
     puntoId: null,
   },

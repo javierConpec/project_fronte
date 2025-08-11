@@ -5,9 +5,7 @@ import { filterNozzle, filterPoint, filterProduct } from "../services/reportServ
 
 
 export const useReporteGeneral = (
-  fechaInicio?: string,
-  fechaFin?: string,
-  idProducto?: number,
+  fecha?: string,
   manguera?: number,
   puntoVenta?: number
 ) => {
@@ -19,7 +17,7 @@ export const useReporteGeneral = (
     
     const fetchData = async () => {
       try {
-        const result = await getReporteGeneral(fechaInicio, fechaFin, idProducto, manguera, puntoVenta);
+        const result = await getReporteGeneral(fecha,manguera, puntoVenta);
         setData(result);
       } catch (err: any) {
         setError(err.message);
@@ -29,7 +27,7 @@ export const useReporteGeneral = (
     };
 
     fetchData();
-  }, [fechaInicio, fechaFin, idProducto, manguera, puntoVenta]);
+  }, [fecha, manguera, puntoVenta]);
 
   return { data, loading, error };
 };
@@ -39,7 +37,6 @@ export const useReporteGeneral = (
 export const useFiltrosReporte = (fuelpointId: number) => {
   const [nozzles, setNozzles] = useState<InozzleFilter[]>([]);
   const [points, setPoints] = useState<IpointFilter[]>([]);
-  const [products, setProducts] = useState<IproductFilter[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -53,7 +50,6 @@ export const useFiltrosReporte = (fuelpointId: number) => {
         ]);
 
         setPoints(pointData);
-        setProducts(productData);
       } catch (err: any) {
         setError(err.message || "Error al obtener los filtros");
       } finally {
@@ -81,5 +77,5 @@ export const useFiltrosReporte = (fuelpointId: number) => {
     fetchNozzles();
   }, [fuelpointId]);
 
-  return { nozzles, points, products, loading, error };
+  return { nozzles, points, loading, error };
 };
