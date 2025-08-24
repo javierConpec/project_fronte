@@ -1,13 +1,13 @@
 import { useVentasPorProducto } from "../../hooks/chartHook";
 import { Chart, registerables } from "chart.js";
 import { useEffect, useRef } from "react";
-import { formatPrice } from "../../lib/utils";
-import { Loader } from "../loader";
+import { formatPrice } from "../../utils/functionsGen";
+import { Loader } from "../Loader/loader";
 
 Chart.register(...registerables);
 
 export const ChartBarraProductos = () => {
-  const { ventasPorProducto, loading, error } = useVentasPorProducto();
+  const { ventasPorProducto, loading, error } = useVentasPorProducto();//obtener ventas por producto
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
 
@@ -19,7 +19,7 @@ export const ChartBarraProductos = () => {
     const data = ventasPorProducto.map((v) => parseFloat(formatPrice(v.total_vendido)));
 
     const colores = [
-      "#2563eb", "#22c55e", "#facc15", "#ef4444", "#8b5cf6",
+      "#4941b4ff", "#23224eff", "#2117a8ff", "#2518d6ff", "#666699",
       
     ];
 
@@ -87,7 +87,7 @@ export const ChartBarraProductos = () => {
   if (error) return <p>Error al cargar ventas: {error}</p>;
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-xl w-1/2 h-[400px] mt-5">
+    <div className="bg-background-0 p-4 rounded-lg shadow-xl w-1/2 h-[400px] mt-5">
       <canvas ref={canvasRef} className="w-full h-full"></canvas>
     </div>
   );

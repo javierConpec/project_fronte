@@ -5,4 +5,5 @@ import react from "@astrojs/react";
 // Sin @tailwindcss/vite
 export default defineConfig({
   integrations: [react()],
+  output: 'static'
 });

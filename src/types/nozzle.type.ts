@@ -1,17 +1,19 @@
 export interface Inozzle{
-    fuelPointId : number;
-    idNozzle1: number;
-    nozzle1: string;
-    idNozzle2: number;
-    nozzle2: string;
-    idNozzle3: number;
-    nozzle3: string;
-    idNozzle4: number;
-    nozzle4: string;
-    idNozzle5: number;
-    nozzle5: string;
-    idNozzle6: number;
-    nozzle6: string;
+    id: number;
+    FuelPointId : number;
+    ProductId1: number;
+    ProductNameN1: string;
+    ProductId2: number;
+    ProductNameN2: string;
+    ProductId3: number;
+    ProductNameN3: string;
+    ProductId4: number;
+    ProductNameN4: string;
+    ProductId5: number;
+    ProductNameN5: string;
+    ProductId6: number;
+    ProductNameN6: string;
+    idManguera?: number;
 }
 
 

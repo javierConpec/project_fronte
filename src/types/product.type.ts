@@ -13,5 +13,5 @@ export interface IupdateProduct {
   currentPrice: number;
   internalCode: string;
   active: boolean;
-  needsUpdate:boolean
+  needsUpdate?:boolean
 }

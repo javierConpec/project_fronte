@@ -1,4 +1,4 @@
-import { Pencil, Check, X } from "lucide-react";
+import { Pencil, Check, X, Trash } from "lucide-react";
 import { useProduct } from "../../hooks/productHook";
 import { SectionTitle } from "../sectionTitle";
 import { RiGasStationFill } from "react-icons/ri";
@@ -7,6 +7,8 @@ import { CustomModal } from "../modal/customModal";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UseLoading } from "../../hooks/loaderHook";
+import { SpinnerBeat } from "../Loader/spinner";
 
 export function ProductsPage() {
   const { products, loading, error, updateProduct } = useProduct();
@@ -25,6 +27,7 @@ export function ProductsPage() {
         ...selectedProduct,
         id: data.id,
         name: data.name,
+        internalCode: data.internalCode,
         currentPrice: data.currentPrice,
       });
       toast.success("Producto actualizado exitosamente");
@@ -35,8 +38,10 @@ export function ProductsPage() {
     }
   };
 
-  
-  if (loading) return <p>Cargando...</p>;
+  //Carga de la pagina
+  const showLoader = UseLoading(loading, 1000);
+
+  if (showLoader) return <SpinnerBeat />;
   if (error) return <p>Error: {error}</p>;
 
   return (
@@ -44,7 +49,7 @@ export function ProductsPage() {
       <div>
         <SectionTitle icon={RiGasStationFill} title="Combustibles" />
         <table className="w-full">
-          <thead className="bg-gray-700 text-sm uppercase font-semibold text-white text-center">
+          <thead className="bg-primary-900 text-sm uppercase font-semibold text-text-50 text-center">
             <tr>
               <th className="px-6 py-3">No</th>
               <th className="px-6 py-3">Nombre</th>
@@ -55,7 +60,7 @@ export function ProductsPage() {
               <th className="px-6 py-3">Acciones</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200  text-center">
+          <tbody className="divide-y divide-text-100  text-center">
             {products.map((fila, index) => (
               <tr key={index} className="border-t text-sm">
                 <td className="px-6 py-2">{fila.id}</td>
@@ -86,14 +91,16 @@ export function ProductsPage() {
                       }
                     }}
                     className={`w-11 h-6 rounded-full transition-colors duration-300 ${
-                      fila.active ? "bg-gray-500" : "bg-gray-100 border "
+                      fila.active
+                        ? "bg-extras-verde"
+                        : "bg-background-50 border "
                     }`}
                   >
                     <div
                       className={`w-4 h-4  rounded-full shadow transform transition-transform duration-300 ${
                         fila.active
-                          ? "translate-x-6 bg-white"
-                          : "translate-x-1 bg-gray-500"
+                          ? "translate-x-6 bg-background-0"
+                          : "translate-x-1 bg-background-200"
                       }`}
                     ></div>
                   </button>
@@ -101,22 +108,50 @@ export function ProductsPage() {
                 <td className="px-6 py-3">
                   <div className="flex items-center justify-center">
                     {fila.needsUpdate ? (
-                      <Check className="text-green-500" />
+                      <Check className="text-extras-verde" />
                     ) : (
-                      <X className="text-red-500" />
+                      <X className="text-extras-rojo" />
                     )}
                   </div>
                 </td>
                 <td className="px-6 py-3">
                   <button
                     onClick={() => {
+                      if (!fila.active) {
+                        toast.warning(
+                          "No se puede editar un producto inactivo"
+                        );
+                        return;
+                      }
                       openModal(fila);
                       setSelectedProduct(fila);
                     }}
-                    className="text-gray-700 hover:text-gray-900"
+                    className="text-accent-700 hover:text-accent-900"
                     title="Editar"
                   >
                     <Pencil size={18} />
+                  </button>
+
+                  <button
+                    onClick={async () => {
+                      try {
+                        await updateProduct({
+                          id: fila.id,
+                          name: (fila.name = ""),
+                          currentPrice: (fila.currentPrice = 0),
+                          internalCode: (fila.internalCode = "00"),
+                          active: (fila.active = false),
+                          needsUpdate: (fila.needsUpdate = false),
+                        });
+                        toast.success(`Producto eliminado exitosamente`);
+                      } catch (error) {
+                        toast.error("Error al actualizar el estado");
+                      }
+                    }}
+                    className="text-extras-rojo  ml-2"
+                    title="Marcar para actualización"
+                  >
+                    <Trash size={18} />
                   </button>
                 </td>
               </tr>
@@ -137,13 +172,14 @@ export function ProductsPage() {
               type: "number",
               value: selectedProduct.id,
               disabled: true,
+              fullWidth: true,
             },
             {
               name: "name",
-              label: "Nombre",
+              label: "Nombre Producto",
               type: "text",
               value: selectedProduct.name,
-              disabled: true,
+              fullWidth: true,
             },
             {
               name: "currentPrice",
@@ -151,10 +187,16 @@ export function ProductsPage() {
               type: "number",
               value: selectedProduct.currentPrice,
             },
+            {
+              name: "internalCode",
+              label: "Codigo",
+              type: "number",
+              value: selectedProduct.internalCode,
+            },
           ]}
         />
       )}
-      
+
       <ToastContainer position="top-right" autoClose={3000} />
     </>
   );

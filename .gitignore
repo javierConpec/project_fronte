@@ -12,9 +12,12 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+#Docker
+*.tar
 
 # environment variables
 .env
+config.json
 .env.production
 
 # macOS-specific files

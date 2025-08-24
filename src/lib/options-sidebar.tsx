@@ -10,27 +10,27 @@ type SidebarOption = {
 export const optionsSidebar: SidebarOption[] = [
   {
     label: "Inicio",
-    icon: <Home size={20} />,
+    icon: <Home size={25} />,
     href: "/",
   },
   {
     label: "Configuración",
-    icon: <Settings size={20} />,
+    icon: <Settings size={25} />,
     href: "/configuracion",
   },
   {
     label: "Loggin",
-    icon: <FileDown size={20} />,
+    icon: <FileDown size={25} />,
     href: "/loggin",
   },
   {
     label: "Control de Surtidores",
-    icon: <Fuel size={20} />,
+    icon: <Fuel size={25} />,
     href: "/control-surtidores",
   },
   {
     label: "Reportes",
-    icon: <FileBarChart size={20} />,
-    href: "/reportes",
+    icon: <FileBarChart size={25} />,
+    href: "/reporteContometers",
   },
 ];

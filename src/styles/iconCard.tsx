@@ -9,9 +9,9 @@ import type { JSX } from "react";
 
 
 export const iconsMap: { [key: string]: JSX.Element } = {
-  "VentaHoy": <GiPayMoney size={60} className="text-white" />,
-  "VentaTotal": <GiTakeMyMoney size={60} className=" text-white" />,
-  "manguera": <RiGasStationFill size={50} className="text-white" />,
-  "volume": <PiGasCanFill size={50} className="text-white" />,
+  "VentaHoy": <GiPayMoney size={60} className="text-text-100" />,
+  "VentaTotal": <GiTakeMyMoney size={60} className="text-text-100" />,
+  "manguera": <RiGasStationFill size={50} className="text-text-100" />,
+  "volume": <PiGasCanFill size={50} className="text-text-100" />,
  
 };

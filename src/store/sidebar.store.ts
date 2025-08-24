@@ -1,11 +1,19 @@
 import { create } from "zustand"
 
 type SidebarStore = {
-  visible: boolean
-  setVisible: (value: boolean) => void
+  sidebars: Record<string, boolean>
+  toggle: (id: string) => void
+  closeAll: () => void
 }
 
 export const useSidebarStore = create<SidebarStore>((set) => ({
-  visible: false,
-  setVisible: () => set((state) => ({ visible: !state.visible })),
+  sidebars: {},
+  toggle: (id) =>
+    set((state) => ({
+      sidebars: {
+        ...state.sidebars,
+        [id]: !state.sidebars[id],
+      },
+    })),
+  closeAll: () => set({ sidebars: {} }),
 }))

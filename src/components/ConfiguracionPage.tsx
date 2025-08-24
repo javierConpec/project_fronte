@@ -13,8 +13,8 @@ export default function ConfiguracionPage() {
     const [activeTab, setActiveTab] = useState("surtidores");
 
     return (
-        <div className="p-6 bg-white rounded-2xl shadow-xl">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Configuración</h1>
+        <div className="p-6 bg-background-0 rounded-2xl shadow-xl">
+            <h1 className="text-3xl font-extrabold text-text-800 uppercase  mb-6">Configuración</h1>
 
             <div className="flex gap-2 mb-8 pb-2">
                 {tabs.map((tab) => (
@@ -22,8 +22,8 @@ export default function ConfiguracionPage() {
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`px-6 py-2 text-sm font-medium transition-colors duration-300 rounded-full ${activeTab === tab.id
-                            ? "bg-gray-700 text-white shadow"
-                            : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                            ? "bg-primary-900 text-text-50 shadow"
+                            : "bg-background-200 text-text-800 hover:bg-background-300"
                             }`}
                     >
                         {tab.name}

@@ -67,3 +67,23 @@ export const useDatosMangueras = (fuelPointId?: number) => {
 
     return { datosMangueras, loading, error };
 };
+
+
+export const useDatosSurtidores = () => {
+  const [datosSurtidores, setDatosSurtidores] = useState<IchartNozzleData[]>([]);
+  const [loadingS, setLoading] = useState(true);
+  const [errorS, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+
+    
+    obtenerDatosMangueras()
+      .then(setDatosSurtidores)
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { datosSurtidores, loadingS, errorS };
+};

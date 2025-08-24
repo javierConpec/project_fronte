@@ -5,16 +5,20 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/datepicker.css";
 import { useState } from "react";
-import { formatDate, parseLocalDate } from "../../lib/utils";
-
+import { formatDate, parseLocalDate } from "../../utils/functionsGen";
 
 export const FiltrosReporte = ({ onAplicarFiltros }: PropsFilter) => {
-  const [selectedFuelPointId, setSelectedFuelPointId] = useState<number>(0);
-  const { nozzles, points, loading, error } =
-    useFiltrosReporte(selectedFuelPointId);
+  const [selectedFuelPointId, setSelectedFuelPointId] = useState<number | null>(null);
+  const { nozzles, points, loading, error } = useFiltrosReporte(selectedFuelPointId ?? 0);
+
   const [puntoId, setPuntoId] = useState<number | null>(null);
   const [mangueraId, setMangueraId] = useState<number | null>(null);
-  const [fecha, setFecha] = useState("");
+
+  // Fecha y hora
+  const [fechaInicio, setFechaInicio] = useState("");
+  const [fechaFin, setFechaFin] = useState("");
+  const [horaInicio, setHoraInicio] = useState<Date | null>(null);
+  const [horaFin, setHoraFin] = useState<Date | null>(null);
 
   if (loading) return <p></p>;
   if (error) return <p>{error}</p>;
@@ -23,64 +27,132 @@ export const FiltrosReporte = ({ onAplicarFiltros }: PropsFilter) => {
     const filtros = {
       puntoId,
       mangueraId,
-      fecha,
+      fechaInicio,
+      fechaFin,
+      horaInicio: horaInicio
+        ? `${horaInicio.getHours().toString().padStart(2, "0")}:${horaInicio
+            .getMinutes()
+            .toString()
+            .padStart(2, "0")}`
+        : undefined,
+      horaFin: horaFin
+        ? `${horaFin.getHours().toString().padStart(2, "0")}:${horaFin
+            .getMinutes()
+            .toString()
+            .padStart(2, "0")}`
+        : undefined,
     };
     onAplicarFiltros(filtros);
   };
 
   return (
-    <div className="flex flex-col mt-5 gap-4 ml-5 text-white">
+    <div className="flex flex-col mt-5 gap-4 ml-5 text-text-50">
       <div className="flex flex-col gap-4">
+        {/*Fecha */}
         <div className="flex flex-col">
-          <label className="block mb-1 text-sm font-semibold">
-            Fecha
-          </label>
+          <label className="block mb-1 text-sm font-semibold">Fecha Inicial</label>
           <DatePicker
             showIcon
             isClearable
-            startDate={fecha ? parseLocalDate(fecha) : null}
-            closeOnScroll={true}
-            selected={fecha ? parseLocalDate(fecha) : null}
+            selected={fechaInicio ? parseLocalDate(fechaInicio) : null}
             onChange={(date: Date | null) =>
-              setFecha(date ? formatDate(date) : "")
+              setFechaInicio(date ? formatDate(date) : "")
+            }
+            dateFormat="yyyy-MM-dd"
+            placeholderText="Seleccionar fecha"
+            className="bg-text-800 text-text-50 border border-text-600 rounded-lg px-3 py-2 w-full"
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="block mb-1 text-sm font-semibold">Fecha Final</label>
+          <DatePicker
+            showIcon
+            isClearable
+            selected={fechaFin ? parseLocalDate(fechaFin) : null}
+            onChange={(date: Date | null) =>
+              setFechaFin(date ? formatDate(date) : "")
             }
             dateFormat="yyyy-MM-dd"
             placeholderText="Seleccionar fecha"
             calendarClassName="bg-gray-500"
-            className="bg-gray-800 text-white border border-gray-600 rounded-lg px-3 py-2 w-full"
+            className="bg-text-800 text-text-50 border border-text-600 rounded-lg px-3 py-2 w-full"
           />
         </div>
 
+        {/*Hora inicio */}
+        <div className="flex flex-row gap-4">
+          <div className="flex flex-col">
+            <label className="block mb-1 text-sm font-semibold">
+              Hora inicio
+            </label>
+            <DatePicker
+              selected={horaInicio}
+              onChange={(date) => setHoraInicio(date)}
+              showTimeSelect
+              isClearable
+              showTimeSelectOnly
+              timeFormat="HH:mm"
+              timeIntervals={5}
+              timeCaption="Hora"
+              dateFormat="HH:mm"
+              placeholderText="Selecciona hora de inicio"
+              className="bg-text-800 text-text-50 border border-text-600 rounded-lg px-3 py-2 w-full"
+              calendarClassName="!bg-text-700 !text-text-950"
+            />
+          </div>
+
+          {/*Hora fin */}
+          <div className="flex flex-col">
+            <label className="block mb-1 text-sm font-semibold">Hora fin</label>
+            <DatePicker
+              selected={horaFin}
+              onChange={(date) => setHoraFin(date)}
+              showTimeSelect
+              isClearable
+              showTimeSelectOnly
+              timeFormat="HH:mm"
+              timeIntervals={5}
+              timeCaption="Hora"
+              dateFormat="HH:mm"
+              placeholderText="Selecciona hora de fin"
+              className="bg-text-800 text-text-50 border border-text-600 rounded-lg px-3 py-2 w-full"
+              calendarClassName="!bg-text-700 !text-text-950" 
+            />
+          </div>
+        </div>
+
+        {/* Filtros punto y manguera */}
         <CustomDropdown
           label="Punto de Venta"
           options={points.map((p) => ({
             id: p.Id,
             label: `Surtidor ${p.LogicalNumber}`,
           }))}
-          onSelect={(id) => {
+          onSelectId={(id) => {
             setPuntoId(id);
-            if (id !== null) {
-              setSelectedFuelPointId(id);
-            }
+            setSelectedFuelPointId(id);
+            setMangueraId(null);
           }}
           variant="default"
         />
 
-        {selectedFuelPointId !== 0  && (
+        {selectedFuelPointId !== null && (
           <CustomDropdown
             label="Manguera"
             options={nozzles.map((n) => ({
               id: n.id,
               label: `Manguera ${n.NozzleNumber}`,
             }))}
-            onSelect={(id) => setMangueraId(id)}
+            selectedId={mangueraId}
+            onSelectId={(id) => setMangueraId(id)}
             variant="default"
           />
         )}
 
+      
         <button
           onClick={handleAplicar}
-          className="bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded-lg mt-2 self-start w-full"
+          className="bg-accent-600 hover:bg-accent-700 px-4 py-2 rounded-lg mt-2 self-start w-full"
         >
           Aplicar Filtros
         </button>

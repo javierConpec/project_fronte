@@ -18,7 +18,7 @@ export const useNozzle = () => {
         }
     };
 
-    const udpateNozzle = async (updated: InozzleUpdate)=>{
+    const updateNozzle = async (updated: InozzleUpdate)=>{
         if(!updated.id || updated.fuelPointId == null || updated.nozzleNumber == null ){
             console.warn("Faltan datos para actualizar: ", updated)
             return;
@@ -36,5 +36,5 @@ export const useNozzle = () => {
         fetchNozzle();
     },[]);
 
-    return {nozzle,loading,error, fetchNozzle, udpateNozzle};
+    return {nozzle,loading,error, fetchNozzle, updateNozzle};
 }

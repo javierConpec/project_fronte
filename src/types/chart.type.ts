@@ -10,9 +10,10 @@ export interface IchartVentaProducto {
 }
 
 export type IchartNozzleData ={ 
-    Manguera: number;
-    Cara:number;
-    Producto: string;
+    Surtidor?: number;
+    Manguera?: number;
+    Cara?:number;
+    Producto?: string;
     Volumen: string;
 }
 

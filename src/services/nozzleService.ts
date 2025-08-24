@@ -1,7 +1,8 @@
-const API_MANUEL = import.meta.env.PUBLIC_API_URL_2;
 import type { Inozzle, InozzleUpdate } from "../types/nozzle.type";
+import { getApiManuel } from "../../config"; // importamos la función
 
 export const nozzleService = async (): Promise<Inozzle[]> => {
+  const API_MANUEL = await getApiManuel(); // obtenemos la URL
   const response = await fetch(`${API_MANUEL}/Nozzle/pivot`);
   if (!response.ok) throw new Error("Error al obtener las mangueras");
   const data = await response.json();
@@ -9,6 +10,7 @@ export const nozzleService = async (): Promise<Inozzle[]> => {
 };
 
 export const nozzleUpdateService = async (data: InozzleUpdate) => {
+  const API_MANUEL = await getApiManuel(); // obtenemos la URL
   try {
     const response = await fetch(`${API_MANUEL}/Nozzle/update`, {
       method: "POST",

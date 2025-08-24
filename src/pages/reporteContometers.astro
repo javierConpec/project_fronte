@@ -1,0 +1,8 @@
+---
+import { ReportContometerTable } from "../components/tables/reportContometerTable";
+import Layout from "../layouts/with-sidebar.astro";
+---
+
+<Layout title="Reportes del sistema">
+  <ReportContometerTable client:only="react" />
+</Layout>

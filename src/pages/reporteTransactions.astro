@@ -1,0 +1,8 @@
+---
+import { ReportTransactionsTable } from "../components/tables/reportTransactionsTable";
+import Layout from "../layouts/with-sidebar.astro";
+---
+
+<Layout title="Reportes del sistema">
+  <ReportTransactionsTable client:only="react" />
+</Layout>

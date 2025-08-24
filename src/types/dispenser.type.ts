@@ -9,3 +9,15 @@ export interface Idispenser {
     bitCConfigurationId:number;
     ptsControllerId: number;
 }
+
+export interface IupdateDispenser {
+  id: number;
+  logicalNumber?: string | number;
+  physicalAddress?: string | number;
+  nozzleQuantity?: string | number;
+  factorVolume?: string | number;
+  factorAmount?: string | number;
+  factorContometer?: string | number;
+  bitCConfigurationId?: string | number;
+  ptsControllerId?: string | number;
+}

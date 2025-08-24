@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/with-sidebar.astro';
+import {DispenserPage} from "../components/tables/dispenserTable"
+---
+
+<Layout title="Combustibles">
+  <DispenserPage client:only="react" />
+</Layout>

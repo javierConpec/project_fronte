@@ -1,18 +1,18 @@
-#construir la app
-FROM node:20 AS build
+# Imagen base oficial Node para ARM64
+FROM node:20-alpine
 
 WORKDIR /app
+
 COPY package*.json ./
-RUN npm install
+RUN npm ci
+
 COPY . .
+
+
+# Construimos el frontend con las variables definidas
 RUN npm run build
 
-#servir con nginx
-FROM nginx:stable-alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 4321
 
-# Copiamos un archivo de configuración opcional
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Ejecutar preview escuchando en todas las interfaces
+CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0"]
