@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/with-sidebar.astro';
+import TanquesDashboard from '../components/tanquesdata.tsx';
+---
+
+<Layout title="Surtidores">
+  <TanquesDashboard client:only="react" />
+</Layout>
