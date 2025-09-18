@@ -30,10 +30,7 @@ export  function NozzlePage() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedData = nozzle.slice(startIndex, startIndex + itemsPerPage);
 
-  // Resetear página cuando cambien los datos
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [nozzle]);
+
 
   const openModal = (
     nozzle: Inozzle,

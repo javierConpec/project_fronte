@@ -22,26 +22,35 @@ export const useProduct = () => {
   };
 
   const updateProduct = async (updated: IupdateProduct) => {
-    if (!updated.id || updated.currentPrice == null) {
-      console.warn("Faltan datos para actualizar:", updated);
-      return;
-    }
-    try {
-      await updateProductService({
-        id: updated.id,
-        name: updated.name,
-        currentPrice: updated.currentPrice,
-        internalCode: updated.internalCode,
-        active: updated.active,
-        needsUpdate: updated.needsUpdate,
-      });
-      console.log("Actualizando:", updated);
+  if (!updated.id || updated.currentPrice == null) {
+    console.warn("Faltan datos para actualizar:", updated);
+    return;
+  }
 
-      fetchProduct(); //Es para refrescar la lista
-    } catch (err) {
-      console.error("Error al actualizar el producto:", err);
-    }
-  };
+  //  Actualiza la UI al instante
+  setProducts((prev) =>
+    prev.map((p) => (p.id === updated.id ? { ...p, ...updated } : p))
+  );
+
+  try {
+    await updateProductService({
+      id: updated.id,
+      name: updated.name,
+      currentPrice: updated.currentPrice,
+      internalCode: updated.internalCode,
+      active: updated.active,
+      needsUpdate: updated.needsUpdate ?? true, // default a true
+    });
+
+    console.log("Actualizando:", updated);
+
+    // Intentamos refrescar desde el backend
+    fetchProduct();
+  } catch (err) {
+    console.error("Error al actualizar el producto:", err);
+    
+  }
+};
 
   useEffect(() => {
     fetchProduct();

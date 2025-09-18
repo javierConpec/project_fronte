@@ -8,11 +8,14 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UseLoading } from "../../hooks/loaderHook";
-import { SpinnerBeat } from "../Loader/spinner";
+import { SpinnerBeat,SpinnerClip } from "../Loader/spinner";
 
 export function ProductsPage() {
   const { products, loading, error, updateProduct } = useProduct();
+  const [loadingPrices, setLoadingPrices] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [newPrices, setNewPrices] = useState<{ [key: number]: string }>({});
+  const [showModalPrices, setShowModalPrices] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Iproduct | null>(null);
   const openModal = (product: Iproduct) => {
     setSelectedProduct(product);
@@ -29,8 +32,10 @@ export function ProductsPage() {
         name: data.name,
         internalCode: data.internalCode,
         currentPrice: data.currentPrice,
+        active: selectedProduct.active,
+        needsUpdate: selectedProduct.needsUpdate,
       });
-      toast.success("Producto actualizado exitosamente");
+      toast.success(`${selectedProduct.name} actualizado exitosamente`);
       setShowModal(false);
     } catch (error) {
       toast.error("Error al actualizar el producto");
@@ -47,7 +52,16 @@ export function ProductsPage() {
   return (
     <>
       <div>
-        <SectionTitle icon={RiGasStationFill} title="Combustibles" />
+        <div className="flex items-start justify-between px-5 mb-4">
+          <SectionTitle icon={RiGasStationFill} title="Combustibles" />
+          <button
+            onClick={() => setShowModalPrices(true)}
+            className="bg-primary-300 rounded-lg px-4 py-2 text-background-0 hover:bg-primary-400  font-bold shadow-lg shadow-primary-400"
+          >
+            Cambio de precio
+          </button>
+        </div>
+
         <table className="w-full">
           <thead className="bg-primary-900 text-sm uppercase font-semibold text-text-50 text-center">
             <tr>
@@ -79,7 +93,7 @@ export function ProductsPage() {
                           currentPrice: fila.currentPrice,
                           internalCode: fila.internalCode,
                           active: !fila.active,
-                          needsUpdate: fila.needsUpdate,
+                          needsUpdate: true,
                         });
                         toast.success(
                           `Estado actualizado: ${
@@ -141,7 +155,7 @@ export function ProductsPage() {
                           currentPrice: (fila.currentPrice = 0),
                           internalCode: (fila.internalCode = "00"),
                           active: (fila.active = false),
-                          needsUpdate: (fila.needsUpdate = false),
+                          needsUpdate: (fila.needsUpdate = true),
                         });
                         toast.success(`Producto eliminado exitosamente`);
                       } catch (error) {
@@ -159,6 +173,7 @@ export function ProductsPage() {
           </tbody>
         </table>
       </div>
+
       {showModal && selectedProduct && (
         <CustomModal
           isOpen={showModal}
@@ -179,13 +194,6 @@ export function ProductsPage() {
               label: "Nombre Producto",
               type: "text",
               value: selectedProduct.name,
-              fullWidth: true,
-            },
-            {
-              name: "currentPrice",
-              label: "Precio",
-              type: "number",
-              value: selectedProduct.currentPrice,
             },
             {
               name: "internalCode",
@@ -196,7 +204,79 @@ export function ProductsPage() {
           ]}
         />
       )}
+      {showModalPrices && (
+        <CustomModal
+          isOpen={showModalPrices}
+          title="Cambio de Precios"
+          onClose={() => setShowModalPrices(false)}
+          onSubmit={async () => {
+            try {
+              setLoadingPrices(true); // activar loader
+              await Promise.all(
+                Object.entries(newPrices).map(async ([id, value]) => {
+                  const nuevoPrecio = parseFloat(value);
+                  if (!isNaN(nuevoPrecio) && nuevoPrecio > 0) {
+                    const producto = products.find((p) => p.id === Number(id));
+                    if (producto) {
+                      await updateProduct({
+                        ...producto,
+                        currentPrice: nuevoPrecio,
+                      });
+                    }
+                  }
+                })
+              );
+              toast.success("Precios actualizados correctamente");
+              setNewPrices({});
+              setShowModalPrices(false);
+            } catch (error) {
+              toast.error("Error al actualizar precios");
+            } finally {
+              setLoadingPrices(false); // desactivar loader
+            }
+          }}
+        >
+          <div className="space-y-4 relative">
+            {products
+              .filter((p) => p.active === true)
+              .map((prod) => (
+                <div
+                  key={prod.id}
+                  className="flex items-center justify-between gap-4 border-b pb-2"
+                >
+                  <div>
+                    <p className="font-semibold">{prod.name}</p>
+                    <p className="text-sm text-text-500">
+                      Actual: S/ {Number(prod.currentPrice).toFixed(2)}
+                    </p>
+                  </div>
 
+                  <input
+                    type="number"
+                    step="0.10"
+                    placeholder="Nuevo precio"
+                    className="border border-accent-500 rounded px-2 py-1 w-[150px] text-right"
+                    value={newPrices[prod.id] || ""}
+                    onChange={(e) =>
+                      setNewPrices((prev) => ({
+                        ...prev,
+                        [prod.id]: e.target.value,
+                      }))
+                    }
+                  />
+                </div>
+              ))}
+          </div>
+        </CustomModal>
+      )}
+      {loadingPrices && (
+        <div className="fixed inset-0  bg-[rgba(0,0,0,0.6)] flex items-center justify-center z-50">
+          <SpinnerClip />
+          <p className="text-text-50 ml-3 font-semibold">
+            Actualizando precios...
+          </p>
+        </div>
+      )}
       <ToastContainer position="top-right" autoClose={3000} />
     </>
   );

@@ -94,23 +94,25 @@ export const CustomDropdown = ({
 
       <div className="relative">
         <ul
-          className={`absolute w-full mt-1 rounded-md  overflow-y-auto max-h-60 transform transition-all duration-800 origin-top ${
-            variant === "minimal" ? "bg-gray-100" : "bg-transparent"
-          }
-            ${
-              open
-                ? "scale-y-100 opacity-100 relative"
-                : "scale-y-0 opacity-0 pointer-events-none"
-            } z-10`}
+          className={`absolute w-full mt-1 rounded-md overflow-y-auto max-h-60 transform transition-all duration-800 origin-top
+    ${
+      open
+        ? variant === "minimal"
+          ? "scale-y-100 opacity-100 bg-background-50" 
+          : "scale-y-100 opacity-100 bg-background-800" 
+        : "scale-y-0 opacity-0 pointer-events-none"
+    }
+    ${!open && variant === "minimal" ? "bg-gray-100" : ""}
+    z-10`}
           style={{ transitionTimingFunction: "cubic-bezier(0.8, 0, 0.2, 1)" }}
         >
           {options.map((opt, index) => (
             <li
-              key={`${opt.id}-${index}`} 
+              key={`${opt.id}-${index}`}
               onClick={() => handleSelect(opt)}
               className={`px-4 py-2 cursor-pointer transition-colors ${
                 variant === "minimal"
-                  ? "text-text-950 hover:bg-background-100"
+                  ? "text-text-950 hover:bg-background-100 "
                   : "text-text-50 hover:bg-text-700"
               }`}
             >

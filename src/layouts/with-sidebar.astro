@@ -1,6 +1,7 @@
 ---
 import SidebarOptions from "../components/ui/optionsSidebar";
-import SidebarFiltros from "../components/filterSidebar";
+import SidebarFiltros from "../components/sidebar/filterGeneralSidebar";
+import SidebarTurnos from "../components/sidebar/FilterTurnosSidebar";
 import "../styles/global.css";
 
 const { title = "Isi Global Solutions" } = Astro.props;
@@ -18,7 +19,7 @@ const { title = "Isi Global Solutions" } = Astro.props;
   <body class="w-full h-full flex">
     <SidebarOptions client:load />
     <SidebarFiltros client:load />
-
+    <SidebarTurnos client:only="react" />
     <!-- Contenido principal -->
     <main class="flex-1 bg-background-100 p-6 overflow-y-auto">
       <slot />

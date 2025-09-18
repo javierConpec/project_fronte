@@ -11,6 +11,7 @@ export const productService = async (): Promise<Iproduct[]> => {
 };
 
 export const updateProductService = async (data: IupdateProduct) => {
+  console.log("Payload enviado al backend:", data);
   const API_MANUEL = await getApiManuel();
   try {
     const response = await fetch(`${API_MANUEL}/Product/update`, {

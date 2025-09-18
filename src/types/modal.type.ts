@@ -10,10 +10,19 @@ export interface ModalInput {
 
 export interface modalCustomProps {
   isOpen: boolean;
-  inputs: ModalInput[];
+  inputs?: ModalInput[];
   onClose: () => void;
   onSubmit: (data: Record<string, string | number>) => void;
   title: string;
   disabled?: boolean;
   variant?: "normal" | "wide";
+  children?: React.ReactNode;
 }
+
+
+export interface FiltroModalProps  {
+  isOpen: boolean;
+  onClose: () => void;
+  toggleSidebarFiltros: () => void;
+  toggleSidebarTurnos: () => void;
+};

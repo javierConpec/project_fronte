@@ -10,16 +10,22 @@ export const CustomModal = ({
   onSubmit,
   title,
   disabled,
+  children,
   variant = "normal", // style por defecto
 }: modalCustomProps) => {
   const [formData, setFormData] = useState<Record<string, string | number>>(
-    () =>
-      inputs.reduce((acc, curr) => {
-        acc[curr.name] =
-          typeof curr.value === "boolean" ? String(curr.value) : curr.value ?? "";
-        return acc;
-      }, {} as Record<string, string | number>)
-  );
+  () =>
+    inputs
+      ? inputs.reduce((acc, curr) => {
+          acc[curr.name] =
+            typeof curr.value === "boolean"
+              ? String(curr.value)
+              : curr.value ?? "";
+          return acc;
+        }, {} as Record<string, string | number>)
+      : {} // 👈 si no hay inputs, arranca vacío
+);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,35 +47,44 @@ export const CustomModal = ({
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.6)] flex justify-center items-center z-50">
       <div className={`bg-background-0 p-6 rounded-xl w-full ${modalWidth} shadow-4xl`}>
+        {/* Título */}
         <div className="flex justify-center mb-6">
           <SectionTitle icon={PencilIcon} title={title} />
         </div>
 
-        <div className={inputWrapperClass}>
-          {inputs.map((input) => (
-            <div
-              key={input.name}
-              className={input.fullWidth ? "col-span-2" : ""}
-            >
-              {input.customComponent ? (
-                input.customComponent
-              ) : (
-                <>
-                  <label className="block text-md font-medium">{input.label}</label>
-                  <input
-                    type={input.type || "text"}
-                    name={input.name}
-                    value={formData[input.name]}
-                    onChange={handleChange}
-                    disabled={input.disabled}
-                    className="mt-1 p-2 w-full border rounded-md border-accent-700"
-                  />
-                </>
-              )}
-            </div>
-          ))}
-        </div>
+        {/* Si hay children → los pinta, sino renderiza inputs */}
+       {children ? (
+  <div>{children}</div>
+) : (
+  <div className={inputWrapperClass}>
+    {inputs?.map((input) => (
+      <div
+        key={input.name}
+        className={input.fullWidth ? "col-span-2" : ""}
+      >
+        {input.customComponent ? (
+          input.customComponent
+        ) : (
+          <>
+            <label className="block text-md font-medium">
+              {input.label}
+            </label>
+            <input
+              type={input.type || "text"}
+              name={input.name}
+              value={formData[input.name]}
+              onChange={handleChange}
+              disabled={input.disabled}
+              className="mt-1 p-2 w-full border rounded-md border-accent-700"
+            />
+          </>
+        )}
+      </div>
+    ))}
+  </div>
+)}
 
+        {/* Botones */}
         <div className="flex justify-end mt-8 space-x-2">
           <button
             onClick={onClose}
@@ -77,12 +92,14 @@ export const CustomModal = ({
           >
             Cancelar
           </button>
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 bg-primary-600 text-text-50 font-semibold rounded hover:bg-primary-700"
-          >
-            Guardar
-          </button>
+          {!disabled && (
+            <button
+              onClick={handleSubmit}
+              className="px-4 py-2 bg-primary-600 text-text-50 font-semibold rounded hover:bg-primary-700"
+            >
+              Guardar
+            </button>
+          )}
         </div>
       </div>
     </div>
