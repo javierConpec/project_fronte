@@ -13,8 +13,12 @@ export default function LoginEntry() {
 
   if (!loggedIn) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <LoginForm /> {/* ✅ ya sin onLogin */}
+       <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: "url('./fondoLogin.webp')" }}
+      >
+        
+        <LoginForm /> {/* ya sin onLogin */}
       </div>
     );
   }
