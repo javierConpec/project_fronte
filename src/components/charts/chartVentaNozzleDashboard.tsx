@@ -1,21 +1,46 @@
-import { useDatosMangueras,usePuntosDeCombustible,useDatosSurtidores} from "../../hooks/chartHook";
+import {
+  useDatosMangueras,
+  usePuntosDeCombustible,
+  useDatosSurtidores,
+} from "../../hooks/chartHook";
 import { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
-import { Loader } from "../Loader/loader";
+import { FilterVentaModal } from "../modal/filterVentaModal";
 
-export const ChartMangueras = () => {
-  const [selectedFuelPoint, setSelectedFuelPoint] = useState<number | undefined>(undefined);// Estado para el punto de combustible seleccionado
-  const {datosSurtidores} = useDatosSurtidores();
-  const { datosMangueras, loading, error } =useDatosMangueras(selectedFuelPoint);//capturar el punto de combustible seleccionado
-  const { puntosDeCombustible, loadingP, errorP } = usePuntosDeCombustible();//obtener los puntos de combustible
+export const ChartManguerasBar = () => {
+  const [selectedFuelPoint, setSelectedFuelPoint] = useState<
+    number | undefined
+  >(undefined);
+  const { datosSurtidores } = useDatosSurtidores();
+  const [filtros, setFiltros] = useState<{ anio?: number; mes?: number }>({});
+  const { datosMangueras, loading, error } = useDatosMangueras(
+    selectedFuelPoint,
+    filtros.anio,
+    filtros.mes
+  );
+  const { puntosDeCombustible, loadingP, errorP } = usePuntosDeCombustible();
   const chartRef = useRef<HTMLDivElement | null>(null);
   const chartInstanceRef = useRef<echarts.ECharts | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const colores = ["#4941b4ff", "#23224eff", "#2518d6ff", "#4137c8", "#666699"];
+  // colores fijos por producto
+  const coloresPorProducto: Record<string, string> = {
+    DIESEL: "#3c3a3aff",
+    "G-PREMIUM": "#1027aa",
+    "G-REGULAR": "#25de18ff",
+    GLP: "#f1e90eff",
+  };
+
+  // Si no existe
+  const defaultColor = "#888888";
 
   useEffect(() => {
-    if (loading || error || datosMangueras.length === 0) return;
-    
+    if (
+      loading ||
+      error ||
+      (selectedFuelPoint !== undefined && datosMangueras.length === 0)
+    )
+      return;
 
     const chartElement = chartRef.current;
     if (!chartElement) return;
@@ -24,133 +49,168 @@ export const ChartMangueras = () => {
       chartInstanceRef.current = echarts.init(chartElement);
     }
 
-    let option: echarts.EChartsOption ;
-    if(selectedFuelPoint !== undefined){
-      option ={
- title: {
-        text: "Volumen por Manguera",
-        left: "center",
-        textStyle: { fontSize: 25 },
-      },
-      tooltip: {
-        trigger: "item",
-        formatter: (params: any) =>
-          `Manguera ${params.name}: ${params.value} L`,
-      },
-      animation: true, 
-      animationEasing: "linear",
-      legend: { top: "middle", orient: "vertical", left: "left", itemGap: 30 },
-      series: [
-        {
-          type: "pie",
-          radius: ["40%", "100%"],
-          center: ["50%", "80%"],
-          startAngle: 180,
-          endAngle: 360,
-          animationDurationUpdate: 1500,
-          animationEasingUpdate: "cubicInOut",
+    let option: echarts.EChartsOption;
 
-          avoidLabelOverlap: false,
-          label: { show: false, position: "center" },
-          emphasis: {
-            label: { show: true, fontSize: "15", fontWeight: "bold" },
-          },
-          labelLine: { show: false },
-          data: datosMangueras.map((m, index) => ({
-            name: `Manguera ${m.Manguera} (${m.Producto})`,
-            value: parseFloat(m.Volumen),
-            itemStyle: { color: colores[index % colores.length] },
-          })),
+    if (selectedFuelPoint !== undefined) {
+      // Gráfico de barras por manguera
+      option = {
+        title: {
+          text: "Volumen por Manguera",
+          left: "center",
+          textStyle: { fontSize: 25 },
         },
-      ],
-    };
-      }else{
-        option ={
- title: {
-        text: "Volumen por Surtidor",
-        left: "center",
-        textStyle: { fontSize: 25 },
-      },
-      tooltip: {
-        trigger: "item",
-        formatter: (params: any) =>
-          `Manguera ${params.name}: ${params.value} L`,
-      },
-      animation: true, 
-      animationEasing: "linear",
-      legend: { top: "middle", orient: "vertical", left: "left", itemGap: 30 },
-      series: [
-        {
-          type: "pie",
-          radius: ["40%", "100%"],
-          center: ["50%", "80%"],
-          startAngle: 180,
-          endAngle: 360,
-          animationDurationUpdate: 1500,
-          animationEasingUpdate: "cubicInOut",
+        tooltip: {
+          trigger: "axis",
+          axisPointer: { type: "shadow" },
+          formatter: (params: any) => {
+            const p = params[0];
+            return `Manguera ${p.name} (${p.data.Producto}): ${p.value} L`;
+          },
+        },
+        xAxis: {
+          type: "category",
+          data: datosMangueras.map((m) => m.Manguera ?? "N/A"),
+          name: "Manguera",
+        },
+        yAxis: {
+          type: "value",
+          name: "Volumen (L)",
+        },
+        series: [
+          {
+            type: "bar",
+            data: datosMangueras.map((m) => ({
+              value: parseFloat(m.Volumen),
+              Producto: m.Producto,
+            })),
+            itemStyle: {
+              color: (params: any) => {
+                const producto = params.data.Producto;
+                return coloresPorProducto[producto] || defaultColor;
+              },
+            },
+            barWidth: "70%",
+          },
+        ],
+      };
+    } else {
+      // Gráfico de barras por surtidor
+      option = {
+        title: {
+          text: "Volumen por Surtidor",
+          left: "center",
+          textStyle: { fontSize: 20 },
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: { type: "shadow" },
+          formatter: (params: any) => {
+            const p = params[0];
+            return `Surtidor ${p.name}: ${p.value} L`;
+          },
+        },
+        xAxis: {
+          type: "category",
+          data: datosSurtidores.map((s) => s.Surtidor ?? "N/A"),
+          name: "Surtidor",
+        },
+        yAxis: {
+          type: "value",
+          name: "Volumen (L)",
+        },
+        series: [
+          {
+            type: "bar",
+            data: datosMangueras.map((m) => ({
+              value: parseFloat(m.Volumen),
+              Producto: m.Producto,
+            })),
+            itemStyle: {
+              color: (params: any) => {
+                const producto = params.data.Producto;
+                return coloresPorProducto[producto] || defaultColor;
+              },
+            },
+            barWidth: "70%",
+          },
+        ],
+      };
+    }
 
-          avoidLabelOverlap: false,
-          label: { show: false, position: "center" },
-          emphasis: {
-            label: { show: true, fontSize: "15", fontWeight: "bold" },
-          },
-          labelLine: { show: false },
-          data: datosSurtidores.map((s, index) => ({
-            name: `Surtidor ${s.Surtidor}`,
-            value: parseFloat(s.Volumen),
-            itemStyle: { color: colores[index % colores.length] },
-          })),
-        },
-      ],
-    };
-  }
     chartInstanceRef.current.setOption(option);
-}, [datosMangueras, loading, error, selectedFuelPoint]);
-
+  }, [
+    datosMangueras,
+    datosSurtidores,
+    loading,
+    error,
+    selectedFuelPoint,
+    filtros.anio,
+    filtros.mes,
+  ]);
+  const filtrosTexto = filtros.anio
+    ? `${filtros.mes ? `Mes ${filtros.mes}` : ""} ${filtros.anio}`
+    : "Todos";
   return (
-    <div className="bg-background-0 rounded-lg shadow-xl w-1/2 h-[400px] mt-5 p-4">
+    <div className="bg-background-0 rounded-lg relative shadow-xl w-1/2 h-[400px] mt-5 p-4">
+      <button
+        className="absolute top-2 right-2 bg-secondary-600 text-text-50 px-4 py-1 hover:bg-secondary-700"
+        onClick={() => setModalOpen(true)}
+      >
+        Filtrar: {filtrosTexto}
+      </button>
       <div ref={chartRef} className="w-full h-[300px]"></div>
-      {loading && <Loader/>}
+
       {error && (
         <p className="text-sm text-red-500">
           Error al cargar los datos: {error}
         </p>
       )}
-      
-      <div className="mb-3">
-        {loadingP ? (
-          <p className="text-sm text-gray-500">Cargando puntos...</p>
-        ) : errorP ? (
-          <p className="text-sm text-red-500">Error: {errorP}</p>
-        ) : (
-          <div className="flex flex-wrap justify-center gap-4 mt-4">
-            <button
-              onClick={() => setSelectedFuelPoint(undefined)}
-              className={`px-4 py-2 rounded shadow ${
-                selectedFuelPoint === undefined
-                  ? "bg-accent-800 text-text-100"
-                  : "bg-accent-200"
-              }`}
-            >
-              General
-            </button>
 
-            {puntosDeCombustible.map((p) => (
-              <button
-                key={p}
-                onClick={() => setSelectedFuelPoint(p)}
-                className={`px-4 py-2 rounded shadow ${
-                  selectedFuelPoint === p
-                    ? "bg-accent-800 text-text-100"
-                    : "bg-accent-200"
-                }`}
-              >
-                Punto {p}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+      <div className="mb-3">
+  {loadingP ? (
+    <p className="text-sm text-gray-500">Cargando puntos...</p>
+  ) : errorP ? (
+    <p className="text-sm text-red-500">Error: {errorP}</p>
+  ) : (
+    <div className="flex overflow-x-auto scrollbar-hide gap-4 py-2">
+      <button
+        onClick={() => setSelectedFuelPoint(undefined)}
+        className={`flex-shrink-0 px-4 py-2 rounded shadow ${
+          selectedFuelPoint === undefined
+            ? "bg-accent-800 text-text-100"
+            : "bg-accent-200"
+        }`}
+      >
+        General
+      </button>
+
+      {puntosDeCombustible.map((p, idx) => (
+        <button
+          key={`punto-${p ?? idx}`}
+          onClick={() => setSelectedFuelPoint(p)}
+          className={`flex-shrink-0 px-4 py-2 rounded shadow ${
+            selectedFuelPoint === p
+              ? "bg-accent-800 text-text-100"
+              : "bg-accent-200"
+          }`}
+        >
+          Punto {p}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
+
+      {modalOpen && (
+        <FilterVentaModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onApply={(anio, mes) => {
+            setFiltros({ anio, mes });
+            setModalOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -17,3 +17,6 @@ export type IchartNozzleData ={
     Volumen: string;
 }
 
+export type IfilterMonth = string[];
+
+export type IfilterAnio = string[];

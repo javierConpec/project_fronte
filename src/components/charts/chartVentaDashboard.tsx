@@ -1,35 +1,29 @@
-import { useEffect, useRef, useState } from "react";
-import { Chart, registerables } from "chart.js";
+import { useState, useRef, useEffect } from "react";
+import * as echarts from "echarts";
 import { formatDate } from "../../utils/functionsGen";
-import { obtenerVentas } from "../../services/chartService";
 import { Loader } from "../Loader/loader";
-import type { IchartVenta } from "../../types/chart.type";
 
-Chart.register(...registerables);
+import { useVentas } from "../../hooks/chartHook";
+import { FilterVentaModal } from "../modal/filterVentaModal";
 
 export const ChartVentaDashboard = () => {
-  const [ventas, setVentas] = useState<IchartVenta[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const chartRef = useRef<Chart | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [filtros, setFiltros] = useState<{ anio?: number; mes?: number }>({});
+  const { ventas, loading, error } = useVentas(filtros.anio, filtros.mes);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const fetchPromise = obtenerVentas();
-        const delayPromise = new Promise((res) => setTimeout(res, 1000));
-        const [data] = await Promise.all([fetchPromise, delayPromise]);
-        setVentas(data);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const chartRef = useRef<HTMLDivElement | null>(null);
+  const chartInstanceRef = useRef<echarts.ECharts | null>(null);
 
+  // Abrir modal
+  const handleOpenModal = () => setModalOpen(true);
+
+  // Aplicar filtros desde modal
+  const handleApplyFilters = (anio?: number, mes?: number) => {
+    setFiltros({ anio, mes });
+    setModalOpen(false);
+  };
+
+  // Renderizar el gráfico con ECharts
   useEffect(() => {
     if (loading || error || ventas.length === 0) return;
 
@@ -44,56 +38,111 @@ export const ChartVentaDashboard = () => {
     });
 
     const fechasOrdenadas = Array.from(fechaSet).sort();
-    const colores = ["#4941b4ff", "#23224eff", "#2518d6ff", "#4137c8", "#666699"];
 
-    const datasets = Object.entries(productos).map(
-      ([producto, ventasPorFecha], idx) => ({
-        label: producto,
-        data: fechasOrdenadas.map((f) => ventasPorFecha[f] || 0),
-        borderColor: colores[idx % colores.length],
-        backgroundColor: colores[idx % colores.length],
-        tension: 0.15,
-        fill: false,
-        pointRadius: 5,
-        pointHoverRadius: 7,
-      })
+    // Colores fijos por producto
+    const coloresPorProducto: Record<string, string> = {
+      DIESEL: "#3c3a3aff",
+      "G-PREMIUM": "#1027aa",
+      "G-REGULAR": "#25de18ff",
+      GLP: "#f1e90eff",
+    };
+
+    const defaultColor = "#888888";
+
+    const series: echarts.LineSeriesOption[] = Object.entries(productos).map(
+      ([producto, ventasPorFecha]) => {
+        const color = coloresPorProducto[producto] || defaultColor;
+        return {
+          name: producto,
+          type: "line",
+          data: fechasOrdenadas.map((f) => ventasPorFecha[f] || 0),
+          smooth: false,
+          lineStyle: { color, width: 3 },
+          itemStyle: { color },
+          symbolSize: 5,
+        };
+      }
     );
 
-    if (chartRef.current) chartRef.current.destroy();
+    if (!chartInstanceRef.current) {
+      chartInstanceRef.current = echarts.init(chartRef.current!);
+    }
 
-    chartRef.current = new Chart(canvasRef.current!, {
-      type: "line",
-      data: { labels: fechasOrdenadas, datasets },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: {
-          duration: 800,
-          easing: "linear",
-          delay(ctx) {
-            return ctx.dataIndex * 150;
-          },
-        },
-        plugins: {
-          title: { display: true, text: "Comparacion por Producto", font: { size: 20 } },
-          legend: { position: "top" },
-          tooltip: { mode: "index", intersect: false },
-        },
-        interaction: { mode: "nearest", axis: "x", intersect: false },
-        scales: {
-          x: { title: { display: true, text: "Fecha" } },
-          y: { title: { display: true, text: "Total Vendido" }, beginAtZero: true },
-        },
+    const option: echarts.EChartsOption = {
+      title: {
+        text: "Comparación por Producto",
+        left: "center",
+        textStyle: { fontSize: 20 },
       },
-    });
+      tooltip: {
+        trigger: "item",
+      },
+      legend: {
+        top: "10%",
+      },
+      grid: {
+        top: "20%",
+        left: "5%",
+        right: "5%",
+        bottom: "10%",
+        containLabel: true,
+      },
+      xAxis: {
+        type: "category",
+        data: fechasOrdenadas,
+        name: "Fecha",
+      },
+      yAxis: {
+        type: "value",
+        name: "Total Vendido",
+        min: 0,
+      },
+      series,
+      // Animación inicial
+      animationDuration: 2000,
+      animationEasing: "cubicOut",
+      // Animación cuando cambian los datos
+      animationDurationUpdate: 500,
+      animationEasingUpdate: "cubicOut",
+    };
+
+    chartInstanceRef.current.setOption(option);
+
+    //  Resize listener
+    const handleResize = () => chartInstanceRef.current?.resize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [ventas, loading, error]);
 
-  if (loading) return <Loader />;
-  if (error) return <p>Error al cargar ventas: {error}</p>;
+  const filtrosTexto = filtros.anio
+    ? `${filtros.mes ? `Mes ${filtros.mes}` : ""} ${filtros.anio}`
+    : "Todos";
 
   return (
-    <div className="bg-background-0 p-2 rounded-lg w-full h-[400px] shadow-2xl mt-5">
-      <canvas ref={canvasRef} className="w-full h-full"></canvas>
+    <div className="bg-background-0 p-2 rounded-lg w-full h-[500px] shadow-2xl mt-5 relative">
+      <button
+        className="absolute top-2 right-2 z-50 bg-secondary-600 text-text-50 px-4 py-1 hover:bg-secondary-700"
+        onClick={handleOpenModal}
+      >
+        Filtrar: {filtrosTexto}
+      </button>
+
+      {loading && <Loader />}
+      {error && <p>Error al cargar ventas: {error}</p>}
+
+      {/* Contenedor ECharts */}
+      <div ref={chartRef} className="w-full h-full"></div>
+
+      {modalOpen && (
+        <FilterVentaModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          onApply={handleApplyFilters}
+        />
+      )}
     </div>
   );
 };

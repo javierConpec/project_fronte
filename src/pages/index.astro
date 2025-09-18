@@ -1,18 +1,18 @@
 ---
 // src/pages/index.astro
 import Layout from "../layouts/with-sidebar.astro";
-import { CardDashboard } from "../components/cards/cardDashboard";
-import {ChartVentaDashboard} from "../components/charts/chartVentaDashboard";
-import { ChartBarraProductos } from "../components/charts/chartVentaProdDashboard";
-import {ChartMangueras} from "../components/charts/chartVentaNozzleDashboard";
 ---
 
-<Layout title="Inicio">
-   <CardDashboard client:load />
-   <ChartVentaDashboard client:load />
-      <div class="flex gap-3"> 
-         <ChartBarraProductos client:load />
-      <ChartMangueras client:load />
-      </div>
-  
+<script is:inline>
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  if (isLoggedIn) {
+    window.location.href = "/home"; // si ya está logueado → al dashboard
+  } else {
+    window.location.href = "/login"; // si no → al login
+  }
+</script>
+
+
+<Layout title="pe">
+  <h1 class="text-3xl font-bold">listo</h1>
 </Layout>

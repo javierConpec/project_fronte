@@ -1,15 +1,23 @@
 ---
 // src/pages/home.astro
 import Layout from "../layouts/with-sidebar.astro";
+import { CardDashboard } from "../components/cards/cardDashboard";
+import { ChartVentaDashboard } from "../components/charts/chartVentaDashboard";
+import { ChartPastelProductos } from "../components/charts/chartVentaProdDashboard";
+import { ChartManguerasBar } from "../components/charts/chartVentaNozzleDashboard";
 ---
 
-<!-- Bloquea acceso si no hay sesión -->
 <script is:inline>
   if (localStorage.getItem("isLoggedIn") !== "true") {
-    window.location.href = "/";
+    window.location.href = "/login"; // protección
   }
 </script>
 
 <Layout title="Inicio">
-  <h1 class="text-3xl font-bold">listo</h1>
+  <CardDashboard client:load />
+  <ChartVentaDashboard client:load />
+  <div class="flex gap-3"> 
+    <ChartPastelProductos client:load />
+    <ChartManguerasBar client:load />
+  </div>
 </Layout>
