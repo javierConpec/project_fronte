@@ -33,6 +33,15 @@ export const parseLocalDate = (dateString: string) => {
   return new Date(year, month - 1, day);
 };
 
+export const formatDateString = (dateStr: string) => {
+  if (!dateStr) return "";
+  return new Date(dateStr)
+    .toISOString()        // convierte a ISO: 2025-08-27T19:49:06.000Z
+    .replace("T", " ")    // reemplaza la "T" por espacio
+    .slice(0, 19);        // corta hasta segundos
+};
+
+
 
 
 // Obtener mangueras 
@@ -93,3 +102,23 @@ export function agruparPorSurtidor<T extends { surtidor: string }>(data: T[]) {
 
   return grupos;
 }
+
+
+// Colocar nombre del mes
+export const MES_NOMBRES = [
+  "", 
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
+
+

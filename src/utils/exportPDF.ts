@@ -1,74 +1,96 @@
-// ExportUtils.ts
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { agruparPorSurtidor } from "./functionsGen";
-import type { IreporteGeneral } from "../types/reporte.type";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
+import type { ExportPDFOptions } from "../types/exports.type";
 
 let downloadNumber = 1;
 
-export const exportToPDF = (data: IreporteGeneral[]) => {
-  // Normalizamos los datos
-  const normalizedData = data.map(f => ({
-    ...f,
-    surtidor: String(f.surtidor),
-    producto: f.producto ?? "",
-    manguera: f.manguera ?? "",
-    precio: f.precio ?? 0,
-    cantidad: f.cantidad ?? 0,
-    valor: f.valor ?? 0,
-    contometroInicial: f.contometroInicial ?? 0,
-    contometroFinal: f.contometroFinal ?? 0,
-    consumoReal: f.consumoReal ?? 0,
-  }));
-
-  const tableData = agruparPorSurtidor(normalizedData).flatMap(grupo =>
-    grupo.rows.map(f => [
-      grupo.surtidor,
-      f.producto,
-      f.manguera,
-      `S/ ${f.precio}`,
-      f.cantidad,
-      f.valor,
-      f.contometroInicial,
-      f.contometroFinal,
-      f.consumoReal,
-    ])
-  );
-
-  const tableColumns = [
-    "Surtidor",
-    "Producto",
-    "Manguera",
-    "Precio",
-    "Cantidad",
-    "Valor",
-    "Cont. Inicial",
-    "Cont. Final",
-    "Consumo Real",
-  ];
-
+export const exportToPDF = ({
+  title,
+  columns,
+  rows,
+  fileName = "reporte",
+  includeDate = true,
+  filtros = [],
+}: ExportPDFOptions) => {
   const doc = new jsPDF("p", "mm", "a4");
-  doc.setFontSize(16);
-  doc.text("REPORTE CONTOMETRO", 105, 15, { align: "center" });
-  doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 105, 20, { align: "right" });
 
+  // 🔹 Encabezado
+  doc.setFontSize(14);
+  doc.text(title, 105, 15, { align: "center" });
+
+  // 🔹 Fecha (arriba a la derecha)
+  if (includeDate) {
+    const today = new Date().toISOString().slice(0, 10);
+    doc.setFontSize(9);
+    doc.text(`Fecha: ${today}`, 200, 15, { align: "right" });
+  }
+
+  // 🔹 Tabla principal
   autoTable(doc, {
-    head: [tableColumns],
-    body: tableData,
+    head: [columns],
+    body: (rows as any[]).map((row: any) =>
+      "data" in row
+        ? row.data.map((cell: any) => {
+            if (row.orden === 2) {
+              return {
+                content: cell,
+                styles: { fontStyle: "bold", fillColor: [200, 190, 225] },
+              };
+            }
+            if (row.orden === 3) {
+              return {
+                content: cell,
+                styles: {
+                  fontStyle: "bold",
+                  textColor: [255, 255, 255],
+                  fillColor: [0, 64, 128],
+                },
+              };
+            }
+            return { content: cell };
+          })
+        : row
+    ),
     startY: 25,
-    styles: { fontSize: 8, cellPadding: 3 },
-    headStyles: { fillColor: [97, 97, 97], textColor: 255, fontStyle: "bold" },
-    bodyStyles: { halign: "center" },
+    styles: {
+      fontSize: 7,
+      cellPadding: 2,
+    },
+    headStyles: {
+      fillColor: [10, 15, 41],
+      textColor: 255,
+      fontStyle: "bold",
+      halign: "center",
+    },
+    bodyStyles: { halign: "center", valign: "middle" },
+    margin: { top: 20, left: 5, right: 5 },
+    tableLineWidth: 0.1,
   });
 
-  const today = new Date();
-  const formattedDate = today.toISOString().slice(0, 10);
+  // 🔹 Tabla de filtros (solo si hay filtros aplicados)
+  if (filtros.length > 0) {
+    autoTable(doc, {
+      head: [["Filtro", "Valor"]],
+      body: filtros,
+      styles: { fontSize: 8, halign: "left", cellPadding: 2 },
+      headStyles: {
+        fillColor: [41, 128, 185], 
+        textColor: 255,
+        fontStyle: "bold",
+        halign: "center",
+      },
+      bodyStyles: { valign: "middle" },
+      margin: { left: 120 }, // la mandamos a la derecha
+      tableWidth: 80,
+      startY: doc.internal.pageSize.height - (filtros.length * 8 + 25), // fijamos abajo
+      pageBreak: "avoid",
+    });
+  }
 
-  const fileName = `reporteContometro_${formattedDate}_${downloadNumber}.pdf`;
-  doc.save(fileName);
+  // 🔹 Guardar con fecha
+  const today = new Date().toISOString().slice(0, 10);
+  const finalName = `${fileName}_${today}_${downloadNumber}.pdf`;
+
+  doc.save(finalName);
   downloadNumber++;
 };
-
-
