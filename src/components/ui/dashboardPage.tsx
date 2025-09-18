@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import { CardDashboard } from "../cards/cardDashboard";
 import {ChartVentaDashboard} from "../charts/chartVentaDashboard";
-import { ChartBarraProductos } from "../charts/chartVentaProdDashboard";
-import { ChartMangueras } from "../charts/chartVentaNozzleDashboard";
+import { ChartPastelProductos } from "../charts/chartVentaProdDashboard";
+import { ChartManguerasBar } from "../charts/chartVentaNozzleDashboard";
 export function Dashboard() {
 
  return (
@@ -11,8 +11,8 @@ export function Dashboard() {
       <CardDashboard />
       <ChartVentaDashboard />
       <div className="flex gap-3">
-        <ChartBarraProductos />
-        <ChartMangueras />
+        <ChartPastelProductos />
+        <ChartManguerasBar />
       </div>
     </>
   );
