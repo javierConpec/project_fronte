@@ -1,40 +1,80 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useReportTransactions } from "../../hooks/reporteHook.js";
 import { useReporteFiltrosStore } from "../../store/reporteFiltros.store.js";
-import { FileText,ListFilter } from "lucide-react";
+import { FileText, ListFilter, RefreshCcw } from "lucide-react";
 import { SectionTitle } from "../sectionTitle.js";
-import { RiFileExcel2Fill, RiFilePdf2Fill } from "react-icons/ri";
+import { RiFileExcel2Fill } from "react-icons/ri";
 import { SpinnerClip } from "../Loader/spinner.js";
 import { UseLoading } from "../../hooks/loaderHook.js";
-import { exportToPDF } from "../../utils/exportPDF.js";
 import { exportToExcel } from "../../utils/exportExcel.js";
 import { useSidebarStore } from "../../store/sidebar.store.js";
-import { format } from "date-fns";
+import { FiltroModal } from "../modal/filterModal.js";
+import { useTransactionPending } from "../../hooks/trasanctionHook.js";
+import { toast } from "react-toastify";
+import type { IreporteGeneral } from "../../types/reporte.type.js";
 
 export const ReportTransactionsTable = () => {
   const { toggle } = useSidebarStore();
   const { filtros } = useReporteFiltrosStore();
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
 
-  const { data, loading, error } = useReportTransactions(
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [dataLocal, setDataLocal] = useState<IreporteGeneral[]>([]);
+
+  const { reenviarPendientes, loading: reenviando } = useTransactionPending();
+
+  // Renombramos la data del hook
+  const { data: dataFetched, loading, error } = useReportTransactions(
     filtros.fechaInicio,
     filtros.fechaFin,
     filtros.horaInicio ?? undefined,
     filtros.horaFin ?? undefined,
-    filtros.mangueraId ?? undefined ,
+    filtros.mangueraId ?? undefined,
     filtros.puntoId ?? undefined
   );
+
+  
+  useEffect(() => {
+    if (dataFetched) {
+      setDataLocal(dataFetched);
+    }
+  }, [dataFetched]);
 
   const showLoader = UseLoading(loading, 1000);
   if (showLoader) return <SpinnerClip />;
   if (error) return <p>Error: {error}</p>;
 
-  const totalPages = Math.ceil(data.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
+  const handleCheckboxChange = (id: number) => {
+    setSelectedRows((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
 
+  const handleReenviar = async () => {
+    if (selectedRows.length === 0) {
+      toast.warn("Selecciona al menos una transacción");
+      return;
+    }
+    try {
+      const payload = selectedRows.map((id) => ({ id }));
+      const resp = await reenviarPendientes(payload);
+      toast.success(`Transacciones reenviadas: ${selectedRows.join(", ")}`);
+      console.log("Respuesta backend:", resp);
 
+      // Marcar como sincronizadas en dataLocal
+      setDataLocal((prev) =>
+        prev.map((fila) =>
+          selectedRows.includes(fila.Nro_Transaccion)
+            ? { ...fila, Fecha_Sincronizado: new Date().toISOString() }
+            : fila
+        )
+      );
+
+      setSelectedRows([]); // limpiar selección
+    } catch {
+      toast.error("Error al reenviar transacciones");
+    }
+  };
 
   return (
     <div className="p-6 bg-background-0 rounded-2xl shadow-xl">
@@ -42,37 +82,82 @@ export const ReportTransactionsTable = () => {
         <div className="flex items-start justify-between px-5 mb-4">
           <SectionTitle icon={FileText} title="REPORTE DE TRANSACCIONES" />
           <div className="flex gap-2">
+            {/* Exportar Excel */}
             <button
-              onClick={() => exportToExcel(data)}
+              onClick={() => {
+                const columns = [
+                  "N° Transaccion",
+                  "Fecha",
+                  "Surtidor",
+                  "Manguera",
+                  "Producto",
+                  "Cantidad",
+                  "Precio",
+                  "Total",
+                  "Monto Acumulado",
+                  "Volumen Acumulado",
+                  "Sincronizacion",
+                ];
+                const rows = dataLocal.map((t) => [
+                  t.Nro_Transaccion,
+                  t.Fecha,
+                  t.Surtidor,
+                  t.Manguera,
+                  t.Producto,
+                  t.Cantidad,
+                  t.Precio,
+                  t.Total,
+                  t.Monto_Acumulado,
+                  t.Volumen_Acumulado,
+                  t.Fecha_Sincronizado,
+                ]);
+
+                exportToExcel({
+                  title: "Reporte General por Transacciones",
+                  columns,
+                  rows: rows.map((fila) => fila.map((cell) => cell ?? "")),
+                  fileName: "reporteTransactions",
+                });
+              }}
               className="inline-flex items-center gap-2 px-4 py-2 bg-accent-400 shadow-md shadow-accent-500 text-text-50 rounded-md hover:bg-accent-700 mt-1"
             >
               <RiFileExcel2Fill size={18} />
               Descargar Excel
             </button>
+
             <button
-              onClick={() => exportToPDF(data)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-secondary-600 shadow-md shadow-secondary-500 text-text-50 rounded-md hover:bg-secondary-700 mt-1"
+              onClick={handleReenviar}
+              disabled={reenviando}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-secondary-900 text-text-50 rounded-md shadow hover:bg-secondary-700 mt-1 disabled:opacity-50"
             >
-              <RiFilePdf2Fill size={18} />
-              Descargar PDF
+              <RefreshCcw size={18} />
+              {reenviando ? "Reenviando..." : "Reenviar Pendientes"}
             </button>
-             <button
-              onClick={() => toggle("sidebarFiltros")}
+
+            <button
+              onClick={() => setIsModalOpen(true)}
               className="rounded-full px-2 py-2 ml-3 mt-1 hover:bg-accent-100 transition-colors hover:text-accent-500"
             >
               <ListFilter size={24} />
             </button>
+
+            <FiltroModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              toggleSidebarFiltros={() => toggle("sidebarFiltros")}
+              toggleSidebarTurnos={() => toggle("sidebarTurnos")}
+            />
           </div>
         </div>
 
-        {/* Tabla de reporte*/}
-        {/* SE COLOCA EL ID PARA LA EXPORTACION DEL PDF*/}
+        {/* Tabla */}
         <table
           id="reporte-table"
           className="min-w-full m-auto text-text-800 mt-2"
         >
           <thead className="bg-primary-900 text-text-50 uppercase font-extrabold text-center">
             <tr>
+              <th className="px-3 py-3">Sel.</th>
               <th className="px-3 py-3">N° Transaccion</th>
               <th className="px-3 py-3">Fecha</th>
               <th className="px-3 py-3">Surtidor</th>
@@ -87,43 +172,48 @@ export const ReportTransactionsTable = () => {
             </tr>
           </thead>
           <tbody>
-            {paginatedData.map((fila, index) => (
-              <tr key={index} className="border-t text-sm text-center">
+            {dataLocal.map((fila) => (
+              <tr
+                key={fila.Nro_Transaccion}
+                className="border-t text-sm text-center"
+              >
+                <td className="px-3 py-2">
+                  <input
+                    type="checkbox"
+                    checked={selectedRows.includes(fila.Nro_Transaccion)}
+                    onChange={() => handleCheckboxChange(fila.Nro_Transaccion)}
+                    disabled={!!fila.Fecha_Sincronizado}
+                  />
+                </td>
                 <td className="px-3 py-2">{fila.Nro_Transaccion}</td>
-                <td className="px-3 py-2">{fila.Fecha ? format(new Date(fila.Fecha), "yyyy-MM-dd HH:mm:ss") : "-"}</td>
+                <td className="px-3 py-2">
+                  {fila.Fecha
+                    ? new Date(fila.Fecha)
+                        .toISOString()
+                        .replace("T", " ")
+                        .slice(0, 19)
+                    : ""}
+                </td>
                 <td className="px-3 py-2">{fila.Surtidor}</td>
                 <td className="px-3 py-2">{fila.Manguera}</td>
                 <td className="px-3 py-2">{fila.Producto}</td>
-                <td className="px-3 py-2">{(fila.Cantidad)}</td>
-                <td className="px-3 py-2">S/{(fila.Precio)}</td>
-                <td className="px-3 py-2">S/{(fila.Total)}</td>
-                <td className="px-3 py-2">S/ {(fila.Monto_Acumulado)}</td>
-                <td className="px-3 py-2">{(fila.Volumen_Acumulado)}</td>
-                <td className="px-3 py-2">{fila.Fecha_Sincronizado ? "Sincronizado" : "Pendiente"}</td>
+                <td className="px-3 py-2">{fila.Cantidad}</td>
+                <td className="px-3 py-2">S/{fila.Precio}</td>
+                <td className="px-3 py-2">S/{fila.Total}</td>
+                <td className="px-3 py-2">S/ {fila.Monto_Acumulado}</td>
+                <td className="px-3 py-2">{fila.Volumen_Acumulado}</td>
+                <td className="px-3 py-2">
+                  {fila.Fecha_Sincronizado
+                    ? new Date(fila.Fecha_Sincronizado)
+                        .toISOString()
+                        .replace("T", " ")
+                        .slice(0, 19)
+                    : " Pendiente..."}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
-
-        <div className="flex justify-between items-center pt-4">
-          <button
-            className="px-4 py-2 bg-text-700 text-text-50 rounded-xl hover:bg-text-900 disabled:opacity-50"
-            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            Anterior
-          </button>
-          <span className="text-sm text-accent-600">
-            Página {currentPage} de {totalPages}
-          </span>
-          <button
-            className="px-4 py-2 bg-text-700 text-text-50 rounded-xl hover:bg-text-900 disabled:opacity-50"
-            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-            disabled={currentPage === totalPages}
-          >
-            Siguiente
-          </button>
-        </div>
       </div>
     </div>
   );
