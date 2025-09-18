@@ -1,6 +1,6 @@
 
 export interface IreporteGeneral {
-  Nro_Transaccion?: number;
+  Nro_Transaccion:  number ;
   Fecha?: string ;
   Surtidor?: number;
   Producto?: string;
@@ -17,23 +17,76 @@ export interface IreporteGeneral {
   consumoReal?: string;
 }
 
- export interface Filtros  {
+
+export interface IreporteContometro{
+  FuelPointId:number;
+  NozzleNumber:number;
+  Name:string;
+  UnitPrice:string
+  Volume:string
+  Amount:string;
+  ContometerStart:string;
+  ContometerEnd:string;
+  DifContometer:string;
+  NoContabilizado:string;
+  Fecha:string ;
+  orden:number;
+}
+
+
+export interface IreporteNozzle{
+  Lado:number;
+  Manguera: number;
+  Producto: string;
+  Precio: string;
+  Total_Volumen: string;
+  Total_Monto:string
+  orden?:number
+  FuelPointId:number
+  Fecha: string;
+}
+
+
+export interface IreporteProducts{
+  ID:number;
+  Producto:string;
+  Precio:string;
+  Total_Volumen: string;
+  Total_Monto:string;
+  orden?:number;
+  Fecha:string
+}
+
+// Definición de filtros sin turno
+export interface Filtros {
   mangueraId: number | null;
   puntoId: number | null;
   fechaInicio: string;
   fechaFin: string;
-  horaInicio?: string ;
+  horaInicio?: string;
   horaFin?: string;
-};
+}
 
+// Store principal de filtros
 export type FiltroStore = {
   filtros: Filtros;
   setFiltros: (nuevos: Filtros) => void;
+  resetFiltros: () => void;
+  
 };
 
-export interface PropsFilter  {
+// Props que usan filtros
+export interface PropsFilter {
   onAplicarFiltros: (filtros: Filtros) => void;
-};
+}
+
+// types/reporte.type.ts
+export interface TurnoStore {
+  turnosSeleccionados: string[];
+  setTurnos: (seleccionados: string[]) => void;
+  resetTurnos: () => void; 
+}
+
 
 
 //*Interfaces para los filtros
@@ -52,3 +105,5 @@ export interface IproductFilter{
     name:string;
     internalCode:string;
 }
+
+export type IDateCloseFilter = string[];

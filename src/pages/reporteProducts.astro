@@ -1,0 +1,8 @@
+---
+import { ReporteProductsTable } from "../components/tables/reportProducts";
+import Layout from "../layouts/with-sidebar.astro";
+---
+
+<Layout title="Reportes del sistema">
+  <ReporteProductsTable client:only="react" />
+</Layout>

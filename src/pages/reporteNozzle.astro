@@ -1,0 +1,8 @@
+---
+import { ReportNozzleTable } from "../components/tables/reportNozzle";
+import Layout from "../layouts/with-sidebar.astro";
+---
+
+<Layout title="Reportes del sistema">
+  <ReportNozzleTable client:only="react" />
+</Layout>
