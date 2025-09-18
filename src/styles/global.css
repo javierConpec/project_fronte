@@ -26,6 +26,19 @@
   background: linear-gradient(180deg, #283d5e, #5771bb);
 }
 
+@keyframes wave {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-wave {
+  animation: wave 4s linear infinite;
+}
+
 
 @layer base {
   :root {
