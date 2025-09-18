@@ -11,7 +11,7 @@ export const dispenserService = async (): Promise<Idispenser[]> => {
 };
 
 export const updateDispenserService = async (data: IupdateDispenser) => {
-  const API_MANUEL = await getApiManuel(); // obtenemos la URL desde config
+  const API_MANUEL = await getApiManuel(); 
   try{
     const respoonse = await fetch(`${API_MANUEL}/Dispenser/update`, {
       method: "POST",
@@ -32,3 +32,47 @@ export const updateDispenserService = async (data: IupdateDispenser) => {
     throw error;
   }
 }
+
+export const DispenserLockService = async (id: number) => {
+  const API_MANUEL = await getApiManuel();
+  try {
+    const respoonse = await fetch(`${API_MANUEL}/Dispenser/lock/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!respoonse.ok) {
+      const text = await respoonse.text();
+      throw new Error(`Error: ${text}`);
+    }
+    const result = await respoonse.text();
+    console.log("Respuesta del servidor:", result);
+    return result;
+  } catch (error) {
+    console.error("Error en DispenserLockService:", error);
+    throw error;
+  }
+};
+
+export const DispenserUnlockService = async (id: number) => {
+  const API_MANUEL = await getApiManuel();
+  try {
+    const respoonse = await fetch(`${API_MANUEL}/Dispenser/unlock/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!respoonse.ok) {
+      const text = await respoonse.text();
+      throw new Error(`Error: ${text}`);
+    }
+    const result = await respoonse.text();
+    console.log("Respuesta del servidor:", result);
+    return result;
+  } catch (error) {
+    console.error("Error en DispenserUnlockService:", error);
+    throw error;
+  }
+};

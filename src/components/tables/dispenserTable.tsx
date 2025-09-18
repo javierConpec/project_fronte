@@ -1,4 +1,5 @@
 import { Pencil } from "lucide-react";
+import { CiUnlock, CiLock } from "react-icons/ci";
 import { RiGasStationFill } from "react-icons/ri";
 import { useDispenser } from "../../hooks/dispenserHook";
 import { SectionTitle } from "../sectionTitle";
@@ -12,9 +13,32 @@ import dataCon from "../../data/dispenser-valores.json";
 
 
 export function DispenserPage() {
-  const { dispenser, loading, error, UpdateDispenser } = useDispenser();
+  const { dispenser, error, UpdateDispenser,lock,unlock,loading} = useDispenser();
   const [showModal, setShowModal] = useState(false);
   const [selectDispenser, setSelectDispenser] = useState<Idispenser | null>(null);
+  
+
+   const [lockedDispensers, setLockedDispensers] = useState<number[]>([]);
+
+  const toggleLock = async (id: number) => {
+    try {
+      if (lockedDispensers.includes(id)) {
+        // desbloquear
+        await unlock(id); 
+        setLockedDispensers((prev) => prev.filter((x) => x !== id));
+        toast.success(`Surtidor ${id} desbloqueado`);
+      } else {
+        // bloquear
+        await lock(id); 
+        setLockedDispensers((prev) => [...prev, id]);
+        toast.warn(`Surtidor ${id} bloqueado`);
+      }
+    } catch (err) {
+      toast.error(`Error al cambiar estado del surtidor ${id}`);
+      console.error(err);
+    }
+  };
+
 
   const openModal = (dispenser: Idispenser) => {
     setSelectDispenser(dispenser);
@@ -31,10 +55,12 @@ export function DispenserPage() {
         logicalNumber: data.logicalNumber,
         physicalAddress: data.physicalAddress,
         nozzleQuantity: data.nozzleQuantity,
+        factorPrice: selectDispenser?.factorPrice,
         factorVolume: selectDispenser?.factorVolume,
         factorAmount: selectDispenser?.factorAmount,
         factorContometer:selectDispenser?.factorContometer,
         bitCConfigurationId: data.bitCConfigurationId,
+        factorAmountTotals: selectDispenser?.factorAmountTotals,
         ptsControllerId: data.ptsControllerId,
       });
       toast.success(`Surtidor ${selectDispenser.id} actualizado exitosamente`);
@@ -59,12 +85,14 @@ export function DispenserPage() {
             <tr>
               <th className="px-6 py-3">ID</th>
               <th className="px-6 py-3">N° Logico</th>
-              <th className="px-6 py-3">Cant. Mangueras</th>
-              <th className="px-6 py-3">Volumen</th>
+              <th className="px-6 py-3">Direccion</th>
+              <th className="px-6 py-3">N° Mang.</th>
+              <th className="px-6 py-3">Price</th>
               <th className="px-6 py-3">Volumen</th>
               <th className="px-6 py-3">Importe</th>
               <th className="px-6 py-3">Contometro</th>
-              <th className="px-6 py-3">Configuration</th>
+              <th className="px-6 py-3">Importe Total</th>
+              <th className="px-6 py-3">Config.</th>
               <th className="px-6 py-3">Controlador ID</th>
               <th className="px-6 py-3">Acciones</th>
             </tr>
@@ -74,11 +102,13 @@ export function DispenserPage() {
               <tr key={index} className="border-t text-sm">
                 <td className="px-6 py-2">{fila.id}</td>
                 <td className="px-6 py-2">{fila.logicalNumber}</td>
-                <td className="px-6 py-2">{fila.nozzleQuantity}</td>
                 <td className="px-6 py-2">{fila.physicalAddress}</td>
+                <td className="px-6 py-2">{fila.nozzleQuantity}</td>
+                <td className="px-6 py-2">{fila.factorPrice}</td>
                 <td className="px-6 py-2">{fila.factorVolume}</td>
                 <td className="px-6 py-2">{fila.factorAmount}</td>
                 <td className="px-6 py-2">{fila.factorContometer}</td>
+                <td className="px-6 py-2">{fila.factorAmountTotals}</td>
                 <td className="px-6 py-2">{fila.bitCConfigurationId}</td>
                 <td className="px-6 py-2">{fila.ptsControllerId}</td>
                 <td className="px-6 py-3">
@@ -87,10 +117,23 @@ export function DispenserPage() {
                       openModal(fila);
                       setSelectDispenser(fila);
                     }}
-                    className="text-gray-700 hover:text-gray-900"
+                    className="text-accent-700 hover:text-gray-900"
                     title="Editar"
                   >
                     <Pencil size={18} />
+                  </button>
+                  {/* Lock / Unlock */}
+                  <button
+                    onClick={() => toggleLock(fila.id)}
+                    className="hover:opacity-60 ml-4"
+                    disabled={loading} 
+                    title={lockedDispensers.includes(fila.id) ? "Desbloquear" : "Bloquear"}
+                  >
+                    {lockedDispensers.includes(fila.id) ? (
+                      <CiLock size={20} className="text-extras-rojo" />
+                    ) : (
+                      <CiUnlock size={20} className="text-accent-500" />
+                    )}
                   </button>
                 </td>
               </tr>
@@ -135,6 +178,29 @@ export function DispenserPage() {
               label: "Controlador ID",
               type: "number",
               value: selectDispenser.ptsControllerId,
+            },
+            {
+              name: "factorPrice",
+              customComponent: (
+                <CustomDropdown
+                label="Factor Price"
+                options={dataCon}
+                selectedValue={selectDispenser?.factorPrice ?? ""}
+                onSelectValue={(option) => {
+                  if (option !== null) {
+                    setSelectDispenser((prev) =>
+                      prev
+                        ? {
+                            ...prev,
+                            factorPrice: Number(option),
+                          }
+                        : prev
+                    );
+                  }
+                }}
+                variant="minimal"
+              />
+              ),
             },
             {
               name: "factorVolume",
@@ -204,7 +270,30 @@ export function DispenserPage() {
                 variant="minimal"
               />
               ),
-            }
+            },
+            {
+              name: "factorAmountTotals",
+              customComponent: (
+                <CustomDropdown
+                label="Factor Amount Totals"
+                options={dataCon}
+                selectedValue={selectDispenser?.factorAmountTotals ?? ""}
+                onSelectValue={(option) => {
+                  if (option !== null) {
+                    setSelectDispenser((prev) =>
+                      prev
+                        ? {
+                            ...prev,
+                            factorContometer: Number(option),
+                          }
+                        : prev
+                    );
+                  }
+                }}
+                variant="minimal"
+              />
+              ),
+            },
           ]}
         />
       )}

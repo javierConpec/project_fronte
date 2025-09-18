@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import type { Idispenser, IupdateDispenser } from "../types/dispenser.type";
 import {
+  DispenserLockService,
   dispenserService,
+  DispenserUnlockService,
   updateDispenserService,
 } from "../services/dispenserService";
 
@@ -9,6 +11,7 @@ export const useDispenser = () => {
   const [dispenser, setDispenser] = useState<Idispenser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<String | null>(null);
+  const [result, setResult] = useState<string | null>(null);
 
   const fetchDispenser = async () => {
     try {
@@ -55,5 +58,38 @@ export const useDispenser = () => {
     fetchDispenser();
   }, []);
 
-  return { dispenser, loading, error, fetchDispenser, UpdateDispenser };
+
+  const lock = async (id: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await DispenserLockService(id);
+      setResult(res);
+      return res;
+    } catch (err: any) {
+      setError(err.message ?? "Error al bloquear el dispenser");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const unlock = async (id: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await DispenserUnlockService(id);
+      setResult(res);
+      return res;
+    } catch (err: any) {
+      setError(err.message ?? "Error al desbloquear el dispenser");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { dispenser, loading, error, fetchDispenser, UpdateDispenser,result, lock, unlock};
 };
+
+
